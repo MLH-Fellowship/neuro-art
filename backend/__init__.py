@@ -1,14 +1,14 @@
 import os,sys
+from flask import Flask,escape,request,Response,g,make_response
+from flask.templating import render_template
+
 
 real_path = os.path.dirname(os.path.realpath(__file__))
 sub_path = "/".join(real_path.split("/")[:-1])
 
 os.chdir(sub_path)
 
-from . import nst
-from flask import Flask,escape,request,Response,g,make_response
-from flask.templating import render_template
-
+from .model import nst
 
 app=Flask(__name__)
 app.debug=True

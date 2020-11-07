@@ -1,11 +1,16 @@
 import tensorflow as tf
 from tensorflow.keras.preprocessing.image import load_img,img_to_array,save_img
-  
 from tensorflow.keras.applications import vgg19
 import numpy as np
 import PIL.Image
 import time
 import functools
+
+
+
+
+
+
 
 
 def tensor_to_image(tf_input):
@@ -77,11 +82,13 @@ class StyleContentModel(tf.keras.models.Model):
                   in zip(self.style_layers,style_outputs)}
     return {'content': content_dict,'style': style_dict}
 
+
+
 def clip_0_1(image):
   return tf.clip_by_value(image,clip_value_min=0.0,clip_value_max=1.0)
 
 
-def style_content_loss(outputs,style_targets):
+def style_content_loss(outputs):
   style_outputs = outputs['style']
   content_outputs = outputs['content']
   style_loss = tf.add_n([tf.reduce_mean((style_outputs[name]-style_targets[name])**2)
@@ -95,6 +102,18 @@ def style_content_loss(outputs,style_targets):
   loss = style_loss + content_loss
   return loss
   
+
+@tf.function()
+def train_step(image):
+    with tf.GradientTape() as tape:
+        outputs = extractor(image)
+        loss = style_content_loss(outputs)
+        loss += total_variation_weight*tf.image.total_variation(image)
+
+    grad = tape.gradient(loss, image)
+    opt.apply_gradients([(grad, image)])
+    image.assign(clip_0_1(image))
+
 def high_pass_x_y(image):
     x_var = image[:,:,1:,:] - image[:,:,:-1,:]
     y_var = image[:,1:,:,:] - image[:,:-1,:,:]
@@ -106,18 +125,33 @@ def total_variation_loss(image):
     x_deltas, y_deltas = high_pass_x_y(image)
     return tf.reduce_sum(tf.abs(x_deltas)) + tf.reduce_sum(tf.abs(y_deltas))
 
+
 def main(refer_img_path, target_img_path):
+
+    global num_content_layers 
+    global num_style_layers 
+
+    global style_targets
+    global content_targets
+
+    global style_weight 
+    global content_weight 
+
+    global extractor 
+
+    global total_variation_weight
+    global opt
 
     refer_img_path = refer_img_path.split('/')[-1]
     target_img_path = target_img_path.split('/')[-1]
-    print('HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH',target_img_path)
-    
+
     style_reference_image_path = 'backend/static/images/nst_get/' + refer_img_path
     target_image_path = 'backend/static/images/' + target_img_path
-    print('HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH',target_img_path)
+   
     target_img_path = load_img(target_image_path)
     style_reference_image_path = load_img(style_reference_image_path)
 
+    # Most Commonly used layers for Neural Style Transfer
     content_layers = ['block5_conv2']
     style_layers = ['block1_conv1',
                     'block2_conv1',
@@ -125,54 +159,36 @@ def main(refer_img_path, target_img_path):
                     'block4_conv1',
                     'block5_conv1']
 
-    global num_content_layers 
-    num_content_layers=len(content_layers)
-    global num_style_layers 
+    num_content_layers=len(content_layers)    
     num_style_layers= len(style_layers)
 
     style_extractor = vgg_layers(style_layers)
     style_outputs = style_extractor(style_reference_image_path*255)
 
+
     extractor = StyleContentModel(style_layers,content_layers)
-
     results = extractor(tf.constant(target_img_path))
-
-    global style_targets
+    
     style_targets = extractor(style_reference_image_path)['style']
-    global content_targets
     content_targets = extractor(target_img_path)['content']
     
     total_variation_weight=30
-    @tf.function()
-    def train_step(image,style_content_loss):
-        with tf.GradientTape() as tape:
-            outputs = extractor(image)
-            loss = style_content_loss(outputs,style_targets)
-            loss += total_variation_weight*tf.image.total_variation(image)
-
-        grad = tape.gradient(loss, image)
-        opt.apply_gradients([(grad, image)])
-        image.assign(clip_0_1(image))
-
 
     image = tf.Variable(target_img_path)
-
     opt = tf.optimizers.Adam(learning_rate = 0.02,beta_1=0.99,epsilon=1e-1)
-
-    global style_weight 
+    
     style_weight =1e-2
-    global content_weight 
     content_weight= 1e4
+
     refer_img_name = target_image_path.split(',')[0].split('/')[-1]
     result_prefix = 'backend/static/images/__nst_results/' + refer_img_name
     
-    train_step(image,style_content_loss)
-    train_step(image,style_content_loss)
-    train_step(image,style_content_loss)
+    train_step(image)
+    train_step(image)
+    train_step(image)
+
     img = tensor_to_image(image)
-
-
-    fname = result_prefix #+ '.jpg'
+    fname = result_prefix 
     save_img(fname,img)
 
     return fname
