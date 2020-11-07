@@ -18,9 +18,9 @@ To run Follow these steps:
 ## Current Outlook
 
 
-![1](./assets/1-home.png)
+![1](../assets/1-home.png)
 
-![2](./assets/2-NST.png)
+![2](../assets/2-NST.png)
 
 
-![3](./assets/3-Style-Transfer-Image-Select.png)
+![3](../assets/3-Style-Transfer-Image-Select.png)
