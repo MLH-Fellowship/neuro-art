@@ -1,174 +1,181 @@
-import numpy as np
+import tensorflow as tf
 from tensorflow.keras.preprocessing.image import load_img,img_to_array,save_img
+  
 from tensorflow.keras.applications import vgg19
-from tensorflow.keras import backend as K 
-from scipy.optimize import fmin_l_bfgs_b
+import numpy as np
+import PIL.Image
 import time
-import os
+import functools
+
+
+def tensor_to_image(tf_input):
+  tf_input = tf_input*255
+  tf_input = np.array(tf_input,dtype=np.uint8)
+  if np.ndim(tf_input)>3:
+    assert tf_input.shape[0] ==1
+    tf_input = tf_input[0]
+  return PIL.Image.fromarray(tf_input)
+
+
+def load_img(image_path):
+  max_dim = 512
+  img = tf.io.read_file(image_path)
+  img = tf.image.decode_image(img,channels=3) # Detects the image to perform apropriate opertions
+  img = tf.image.convert_image_dtype(img,tf.float32) # Convert image to tensor dtype
+
+  shape = tf.cast(tf.shape(img)[:-1], tf.float32)
+
+  long_dim = max(shape)
+  scale = max_dim/long_dim
+  new_shape = tf.cast(shape*scale,tf.int32)
+
+  img = tf.image.resize(img,new_shape)
+  return img[tf.newaxis,:]
 
 
 
-print(os.getcwd())
+def vgg_layers(layer_names):
+  vgg = tf.keras.applications.VGG19(include_top = False,weights = 'imagenet')
+  vgg.trainable = False
+  tf_outs = [vgg.get_layer(layer).output for layer in layer_names]
 
-def preprocess_image(image_path):
-	img = load_img(image_path, target_size=(img_height, img_width)) # (400, 381)
-	# The img_to_array() function adds channels: x.shape = (224, 224, 3) for RGB and (224, 224, 1) for gray imag
-	img = img_to_array(img) 			# (400, 381, 3)
-	# expand_dims() is used to add the number of images: x.shape = (1, 224, 224, 3)
-	img = np.expand_dims(img, axis=0) 	# (1, 400, 381, 3)
-	#preprocess_input() subtracts the mean RGB channels of the imagenet dataset. 
-	# This is because the model you are using has been trained on a different dataset: x.shape is still (1, 224, 224, 3)
-	img = vgg19.preprocess_input(img)
+  model = tf.keras.Model([vgg.input],tf_outs)
+  return model
 
-	return img 
+def gram_matrix(input_tensor):
+  result = tf.linalg.einsum('bijc,bijd->bcd',input_tensor,input_tensor)
+  input_shape = tf.shape(input_tensor)
+  num_locations = tf.cast(input_shape[1]*input_shape[2],tf.float32)
+  return result/(num_locations)
 
-def deprocess_image(x):
-	'''vgg19.preprocess_input()'''
-
-	x[:, :, 0] += 103.939
-	x[:, :, 1] += 116.779
-	x[:, :, 2] += 123.68
-	# BGR -> RGB( )
-	x = x[:, :, ::-1]
-	x = np.clip(x, 0, 255).astype('uint8')
-
-	return x 
-
-def content_loss(base, combination):
-
-	return K.sum(K.square(combination - base))
-
-def gram_matrix(x):
-
-	features = K.batch_flatten(K.permute_dimensions(x,(2,0,1)))
-	gram = K.dot(features, K.transpose(features))
-
-	return gram
-
-def style_loss(style, combination):
-
-	S = gram_matrix(style)
-	C = gram_matrix(combination)
-	channels = 3
-	size = img_height * img_width
-
-	return K.sum(K.square(S-C))/(4.*(channels**2)*(size**2))
-
-def total_variation_loss(x):
-
-	a = K.square(x[:, :img_height - 1, :img_width - 1, :] - x[:, 1:, :img_width - 1, :])
-	b = K.square(x[:, :img_height - 1, :img_width - 1, :] - x[:, :img_height - 1, 1:, :])
-	return K.sum(K.pow(a + b, 1.25))
-
-class Evaluator(object):
-
-	def __init__(self):
-		self.loss_value = None
-		self.grads_values = None
-
-	def loss(self, x):
-		assert self.loss_value is None
-		x = x.reshape((1, img_height, img_width, 3))
-		outs = fetch_loss_and_grads([x])
-		loss_value = outs[0]
-		grad_values = outs[1].flatten().astype('float64')
-		self.loss_value = loss_value
-		self.grad_values = grad_values
-		return self.loss_value
-
-	def grads(self, x):
-		assert self.loss_value is not None
-		grad_values = np.copy(self.grad_values)
-		self.loss_value = None
-		self.grad_values = None
-		return grad_values
+class StyleContentModel(tf.keras.models.Model):
+  def __init__(self,style_layers,content_layers):
+    super(StyleContentModel,self).__init__()
+    self.vgg = vgg_layers(style_layers+content_layers)
+    self.style_layers = style_layers
+    self.content_layers = content_layers
+    self.num_style_layers = len(style_layers)
+    self.vgg.trainanble = False
 
 
+  def call(self,inputs):
+    "Expects float input in [0,1]"
+    inputs = inputs*(255.0)
+    preprocessed_input = tf.keras.applications.vgg19.preprocess_input(inputs)
+    outputs = self.vgg(preprocessed_input)
+    style_outputs, content_outputs = (outputs[:self.num_style_layers],
+                                     outputs[self.num_style_layers:])
+    style_outputs = [gram_matrix(style_output)
+                    for style_output in style_outputs]
+
+    content_dict = {content_name : value
+                    for content_name,value
+                    in zip(self.content_layers,content_outputs)}
+
+    style_dict = {style_name:value
+                  for style_name,value
+                  in zip(self.style_layers,style_outputs)}
+    return {'content': content_dict,'style': style_dict}
+
+def clip_0_1(image):
+  return tf.clip_by_value(image,clip_value_min=0.0,clip_value_max=1.0)
 
 
+def style_content_loss(outputs,style_targets):
+  style_outputs = outputs['style']
+  content_outputs = outputs['content']
+  style_loss = tf.add_n([tf.reduce_mean((style_outputs[name]-style_targets[name])**2)
+                        for name in style_outputs.keys()])
+  style_loss *= style_weight/num_style_layers
+
+  content_loss = tf.add_n([tf.reduce_mean((content_outputs[name]-content_targets[name])**2)
+                          for name in content_outputs.keys()])
+
+  content_loss *=content_weight/num_content_layers
+  loss = style_loss + content_loss
+  return loss
+  
+def high_pass_x_y(image):
+    x_var = image[:,:,1:,:] - image[:,:,:-1,:]
+    y_var = image[:,1:,:,:] - image[:,:-1,:,:]
+
+    return x_var, y_var
+
+
+def total_variation_loss(image):
+    x_deltas, y_deltas = high_pass_x_y(image)
+    return tf.reduce_sum(tf.abs(x_deltas)) + tf.reduce_sum(tf.abs(y_deltas))
 
 def main(refer_img_path, target_img_path):
+
     refer_img_path = refer_img_path.split('/')[-1]
     target_img_path = target_img_path.split('/')[-1]
+    print('HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH',target_img_path)
     
-    style_reference_image_path = 'static/images/nst_get/' + refer_img_path
-    target_image_path = 'static/images/' + target_img_path
+    style_reference_image_path = 'backend/static/images/nst_get/' + refer_img_path
+    target_image_path = 'backend/static/images/' + target_img_path
+    print('HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH',target_img_path)
+    target_img_path = load_img(target_image_path)
+    style_reference_image_path = load_img(style_reference_image_path)
 
-    width, height = load_img(target_image_path).size
-    global img_height
-    global img_width
-    image_height = 400
-    image_width = int(width*img_height/height)
-
-    target_image = K.constant(preprocess_image(target_image_path)) # creates image to a constant tensor
-    style_reference_image = K.constant(preprocess_image(style_reference_image_path))
-    combination_image = K.placeholder((1,img_height,img_width,3))
-
-    input_tensor = K.concatenate([target_image,style_reference_image,combination_iamge],axis=0)
-
-    model = vgg19.VGG19(input_tensor = input_tensor,
-    weights = 'imagenet',
-    include_top = False)
-
-
-    outputs_dict = dict([(layer.name,layer.output) for layer in model.layers])
-
-    content_layer = 'block5_conv2'
+    content_layers = ['block5_conv2']
     style_layers = ['block1_conv1',
+                    'block2_conv1',
                     'block3_conv1',
                     'block4_conv1',
                     'block5_conv1']
 
+    global num_content_layers 
+    num_content_layers=len(content_layers)
+    global num_style_layers 
+    num_style_layers= len(style_layers)
 
-    total_variation_weight = 1e-4
-    style_weight = 1e-4
-    style_weight = 1.
-    content_weight = 0.025
+    style_extractor = vgg_layers(style_layers)
+    style_outputs = style_extractor(style_reference_image_path*255)
 
+    extractor = StyleContentModel(style_layers,content_layers)
 
-    loss = K.variable(0.)
-    layer_features = outputs_dict[content_layer]
-    target_image_features = layer_features[0,:,:,:]
-    combination_features = layer_features[2,:,:,:]
+    results = extractor(tf.constant(target_img_path))
 
-    loss = loss + (content_weight * content_loss(target_image_features, combination_features))
-
-
-    for layer_name in style_layers:
-        layer_features = outputs_dict[layer_name]
-        style_reference_features = layer_features[1,:,:,:]
-        combination_features = layer_features[2,:,:,:]
-        sl = style_loss(style_reference_features,combination_features)
-        loss = loss + ((style_weight / len(style_layers))*s1)
-
-    loss = loss + (total_variation_weight * total_variation_loss(combination_image))
-
-    grads = K.gradients(loss,combination_image)[0]
-
-    global fetch_loss_and_grads
-
-    fetch_loss_and_grads = K.function([combination_image],[loss,grads])
-
-    evaluator = Evaluator()
-    refer_img_name = refer_img_path.split(',')[0].split('/')[-1]
-    result_prefix = 'static/images/nst_get' + refer_img_name
-    iterations = 20
-
-    x = preprocess_image(target_image_path)
-    x = x.flatten()
-    for i in range(iterations):
-        print('Number of Iterations: ',i)
-        x,min_val,info = fmin_l_bfgs_b(evaluator.loss,x,fprime=evaluator.grads, maxfun=20)
-
-        print('Current Loss value',min_val)
-
-        img = x.copy().reshape((img_height, img_width,3))
-        img = deprocess_image(img)
-        fname = result_prefix + '.jpg'
+    global style_targets
+    style_targets = extractor(style_reference_image_path)['style']
+    global content_targets
+    content_targets = extractor(target_img_path)['content']
     
-    save_img(fname,img)
-    return fname
+    total_variation_weight=30
+    @tf.function()
+    def train_step(image,style_content_loss):
+        with tf.GradientTape() as tape:
+            outputs = extractor(image)
+            loss = style_content_loss(outputs,style_targets)
+            loss += total_variation_weight*tf.image.total_variation(image)
 
+        grad = tape.gradient(loss, image)
+        opt.apply_gradients([(grad, image)])
+        image.assign(clip_0_1(image))
+
+
+    image = tf.Variable(target_img_path)
+
+    opt = tf.optimizers.Adam(learning_rate = 0.02,beta_1=0.99,epsilon=1e-1)
+
+    global style_weight 
+    style_weight =1e-2
+    global content_weight 
+    content_weight= 1e4
+    refer_img_name = target_image_path.split(',')[0].split('/')[-1]
+    result_prefix = 'backend/static/images/__nst_results/' + refer_img_name
+    
+    train_step(image,style_content_loss)
+    train_step(image,style_content_loss)
+    train_step(image,style_content_loss)
+    img = tensor_to_image(image)
+
+
+    fname = result_prefix #+ '.jpg'
+    save_img(fname,img)
+
+    return fname
 
 if __name__ == "__main__":
     main()

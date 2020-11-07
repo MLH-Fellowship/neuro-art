@@ -33,10 +33,10 @@
 	var files = targetObj.files;
 	for ( var i = 0; i < files.length; i++) {
 		var file = files[i];
-		var imageType = /image.*/; //이미지 파일일경우만.. 뿌려준다.
+		var imageType = /image.*/; 
 		if (!file.type.match(imageType))
 			continue;
-		var prevImg = document.getElementById("prev_" + view_area); //이전에 미리보기가 있다면 삭제
+		var prevImg = document.getElementById("prev_" + view_area); 
 		if (prevImg) {
 			preview.removeChild(prevImg);
 		}
@@ -47,7 +47,7 @@
 		img.style.width = '700px'; 
 		img.style.height = '400px';
 		preview.appendChild(img);
-		if (window.FileReader) { // FireFox, Chrome, Opera 확인.
+		if (window.FileReader) { // FireFox, Chrome, Opera.
 			var reader = new FileReader();
 			reader.onloadend = (function(aImg) {
 				return function(e) {
@@ -131,23 +131,23 @@
 			<h2 align="center" style="color: #353535;">Reference Images</h2>
 			<table align="center">
 				<tr>
-					<td><img class="refer_img" src="./static/images/nst_get/nst_reference1.jpg"></td>
-					<td><img class="refer_img" src="./static/images/nst_get/nst_reference2.jpg"></td>
-					<td><img class="refer_img" src="./static/images/nst_get/nst_reference3.jpg"></td>
-					<td><img class="refer_img" src="./static/images/nst_get/nst_reference4.jpg"></td>
+					<td><img class="refer_img" src="./static/images/nst_get/nst_reference1.JPG"></td>
+					<td><img class="refer_img" src="./static/images/nst_get/nst_reference2.JPG"></td>
+					<td><img class="refer_img" src="./static/images/nst_get/nst_reference3.JPG"></td>
+					<td><img class="refer_img" src="./static/images/nst_get/nst_reference4.JPG"></td>
 				</tr>
 				<tr>
-					<td><input type="radio" name="refer_img" value="nst_reference1.jpg"></td>
+					<td><input type="radio" name="refer_img" value="nst_reference1.JPG"></td>
 					<td><input type="radio" name="refer_img" value="nst_reference2.JPG"></td>
-					<td><input type="radio" name="refer_img" value="nst_reference3.jpg"></td>
-					<td><input type="radio" name="refer_img" value="nst_reference4.jpg"></td>
+					<td><input type="radio" name="refer_img" value="nst_reference3.JPG"></td>
+					<td><input type="radio" name="refer_img" value="nst_reference4.JPG"></td>
 				</tr>
 			</table>
 			<br>
 			<!-- Target Image 사용자 업로드 -->
 			<h2 align="center" style="color: #353535;">Target Image</h2>
 			<input type="file" name="user_img" id="user_img" value="userImage" onchange="previewImage(this,'view_area')"/>
-			<input type="submit" value="확인"/>
+			<input type="submit" value="Submit"/>
 			<br><br>
 			<div align="center" id='view_area'></div>
 		</form>

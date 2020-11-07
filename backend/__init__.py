@@ -45,7 +45,7 @@ def nst_post():
 
         # Neural Style Transfer
         transfer_img = nst.main(refer_img_path,user_img_path)
-        transfer_img_path = '/images/' +str(transfer_img.split('/')[-1])
+        transfer_img_path = '/images/__nst_result/' +str(transfer_img.split('/')[-1])
 
         render_template('nst_post.html',
                         refer_img = refer_img_path,
