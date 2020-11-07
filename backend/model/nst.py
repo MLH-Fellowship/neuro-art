@@ -5,13 +5,7 @@ import numpy as np
 import PIL.Image
 import time
 import functools
-
-
-
-
-
-
-
+import time
 
 def tensor_to_image(tf_input):
   tf_input = tf_input*255
@@ -184,12 +178,20 @@ def main(refer_img_path, target_img_path):
     result_prefix = 'backend/static/images/__nst_results/' + refer_img_name
     
     train_step(image)
-    train_step(image)
-    train_step(image)
+
+    # epochs = 5
+    # steps_per_epoch = 10
+
+    # step = 0
+    # for n in range(epochs):
+    #   for m in range(steps_per_epoch):
+    #     step += 1
+    #     train_step(image)
 
     img = tensor_to_image(image)
     fname = result_prefix 
     save_img(fname,img)
+
 
     return fname
 
