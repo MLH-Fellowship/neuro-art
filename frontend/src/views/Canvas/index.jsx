@@ -9,6 +9,11 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
+import ImageUploader from "react-images-upload";
+import { Paper } from "@material-ui/core";
+import Rating from "@material-ui/lab/Rating";
+import StarBorderIcon from "@material-ui/icons/StarBorder";
+import Box from "@material-ui/core/Box";
 
 const artistList = ["Monet", "Picasso", "Van Gogh"];
 
@@ -25,10 +30,20 @@ const useStyles = makeStyles((theme) => ({
 function Canvas() {
   const classes = useStyles();
   const [artist, setArtist] = useState(artistList[0]);
+  const [picture, setPicture] = useState([]);
+  const [rating, setRating] = useState(0);
 
   const handleArtistChange = (event) => {
     setArtist(event.target.value);
   };
+
+  const onDrop = (pictureFiles, pictureDataURLs) => {
+    setPicture((prevPics) => [...prevPics, ...pictureFiles]);
+  };
+ 
+  const handleRatingChange = (event , value) => {
+    setRating(value);
+  }
   return (
     <>
       <Navbar />
@@ -57,11 +72,46 @@ function Canvas() {
           </Grid>
         </Grid>
         <Grid container spacing={3}>
-          <Grid item xs={12}>
+          <Grid item xs={8}>
             <Typography variant={"h2"} gutterBottom>
-             2. Upload your photo
+              2. Upload your photo
             </Typography>
-           
+            <div>
+              <ImageUploader
+                withIcon={true}
+                buttonText="Choose images"
+                onChange={onDrop}
+                imgExtension={[".jpg", ".png"]}
+                singleImage
+                withPreview
+                maxFileSize={5242880}
+              />
+            </div>
+          </Grid>
+        </Grid>
+        <Grid container spacing={3}>
+          <Grid item xs={8}>
+            <Typography variant={"h2"} gutterBottom>
+              3. Become an artist
+            </Typography>
+            <Paper>
+              <img
+                // style={{ display: "none" }}
+                src={
+                  "https://www.latercera.com/resizer/kHLHjR6u3jIRC7-xl_1oXBzxWUE=/800x0/smart/arc-anglerfish-arc2-prod-copesa.s3.amazonaws.com/public/MEP3EKODIVGKPDXNMGNLB6ZN3A.jpg"
+                }
+                alt={"Monet"}
+              />
+            </Paper>
+            <Box component="fieldset" mb={3} borderColor="transparent">
+              <Rating
+                name="rating"
+                defaultValue={2}
+                precision={1}
+                onChange={handleRatingChange}
+                emptyIcon={<StarBorderIcon fontSize="inherit" />}
+              />
+            </Box>
           </Grid>
         </Grid>
       </Container>

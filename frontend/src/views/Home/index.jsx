@@ -42,7 +42,7 @@ function Home() {
   return (
     <>
       <Navbar />
-      <Container>
+      <Container style={{"height":"60vh"}}>
         <Paper
           className={classes.mainFeaturedPost}
           style={{
@@ -80,7 +80,7 @@ function Home() {
                   component={RouterLink}
                   to={"/canvas"}
                   color="secondary"
-                //   variant="outlined"
+                  //   variant="outlined"
                   className={classes.link}
                 >
                   Canvas
