@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Home from "./views/Home";
 
 function App() {
   return (
@@ -11,8 +12,11 @@ function App() {
         <Route path="/canvas">
           <h1>Canvas Route</h1>
         </Route>
+        <Route path="/showcase">
+          <h1>showcase Route</h1>
+        </Route>
         <Route exact path="/">
-          <h1>Home Route</h1>
+          <Home />
         </Route>
         <Route path="*">
           <h1>Not found</h1>
