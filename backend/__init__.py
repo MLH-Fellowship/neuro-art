@@ -3,16 +3,19 @@ from flask import Flask,escape,request,Response,g,make_response
 from flask.templating import render_template
 
 
+# Should Recieve this from the firebase.
 real_path = os.path.dirname(os.path.realpath(__file__))
 sub_path = "/".join(real_path.split("/")[:-1])
 
-os.chdir(sub_path)
+# os.chdir(sub_path)
 
 from .model import nst
 
 app=Flask(__name__)
 app.debug=True
 
+
+# With Firebase we won't need this since we are using a URL for the database.
 def root_path():
     ''' root directory'''
     real_path = os.path.dirname(os.path.realpath(__file__))
@@ -32,8 +35,12 @@ def nst_get():
 @app.route('/nst_post',methods=['GET','POST'])
 def nst_post():
     if request.method =='POST':
+        # Frontend Request should arrive to the backend.
+        # From the front end we are receveing form data with 1 paramter, the array/string of images for style
+        # It could also be a dictionariy with keys and values where keyws are markers for the style images and values  
         root_path()
 
+        # Convert into JSON packet and bundle both images.
         # Reference Image
         refer_img = request.form['refer_img']
         refer_img_path = '/images/nst_get/' +str(refer_img)
@@ -47,6 +54,8 @@ def nst_post():
         transfer_img = nst.main(refer_img_path,user_img_path)
         transfer_img_path = '/images/__nst_result/' +str(transfer_img.split('/')[-1])
 
+
+            
         render_template('nst_post.html',
                         refer_img = refer_img_path,
                         user_img  = user_img_path,

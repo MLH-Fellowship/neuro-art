@@ -179,21 +179,21 @@ def main(refer_img_path, target_img_path):
     
     train_step(image)
 
-    # epochs = 5
-    # steps_per_epoch = 10
+    epochs = 6
+    steps_per_epoch = 2
 
-    # step = 0
-    # for n in range(epochs):
-    #   for m in range(steps_per_epoch):
-    #     step += 1
-    #     train_step(image)
+    step = 0
+    for n in range(epochs):
+      for m in range(steps_per_epoch):
+        step += 1
+        train_step(image)
 
     img = tensor_to_image(image)
     fname = result_prefix 
     save_img(fname,img)
 
-
     return fname
+
 
 if __name__ == "__main__":
     main()
