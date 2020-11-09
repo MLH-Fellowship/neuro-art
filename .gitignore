@@ -2,7 +2,14 @@
 .vscode
 .theia
 __pycache__
+<<<<<<< HEAD
 venv/
+=======
+
+venv
+cred.json
+
+>>>>>>> 944a090f7b1696c07f992f9236155e9864e6a8bf
 StyleContentModel
 tmp
 notebooks
