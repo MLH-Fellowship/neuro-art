@@ -14,3 +14,13 @@ To run Follow these steps:
 
 4. In a browser open `https://localhost:0.0.0.0`
 
+
+## Current Outlook
+
+
+![1](../assets/1-home.png)
+
+![2](../assets/2-NST.png)
+
+
+![3](../assets/3-Style-Transfer-Image-Select.png)
