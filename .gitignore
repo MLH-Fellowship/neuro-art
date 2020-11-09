@@ -1,11 +1,8 @@
 
 .vscode
 .theia
-
 __pycache__
-
-venv
-
+venv/
 StyleContentModel
 tmp
 notebooks

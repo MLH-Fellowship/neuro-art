@@ -8,6 +8,16 @@ import functools
 import time
 
 def tensor_to_image(tf_input):
+  '''
+  Converts a numerical input into an RGB image.
+
+  :params:
+  tf_input : A numerical array
+
+  :returns: 
+  Numerical array converted to an RGB image
+
+  '''
   tf_input = tf_input*255
   tf_input = np.array(tf_input,dtype=np.uint8)
   if np.ndim(tf_input)>3:
@@ -17,6 +27,16 @@ def tensor_to_image(tf_input):
 
 
 def load_img(image_path):
+  '''
+  Loads an image from the given image path. Image is resized to match the scale (max_dim/long_dim).
+
+  :params:
+  image_path : the path to an image we want to load
+
+  :returns:
+  A resized image
+  '''
+
   max_dim = 512
   img = tf.io.read_file(image_path)
   img = tf.image.decode_image(img,channels=3) # Detects the image to perform apropriate opertions
@@ -31,9 +51,18 @@ def load_img(image_path):
   img = tf.image.resize(img,new_shape)
   return img[tf.newaxis,:]
 
-
-
 def vgg_layers(layer_names):
+  ''' 
+  Loading a pre-trained VGG 19 model from Keras. We will be using a custom input for the model therefore
+  include_top is set as 'False'. We are also using weights from 'imagenet'.
+  Lastly we are not retraining the pretrained layers of our model, therefore vgg.trainable is set to 'False'
+  
+  :params:
+  layer_names : list of layers we want to cherry pick from the VGG model. (for e.g ['block1_conv1', 'block2_conv1', 'block3_conv1', 'block4_conv1', 'block5_conv1'])
+
+  returns:
+  A keras model wtih the selected inputs and ouputs.
+  '''
   vgg = tf.keras.applications.VGG19(include_top = False,weights = 'imagenet')
   vgg.trainable = False
   tf_outs = [vgg.get_layer(layer).output for layer in layer_names]
