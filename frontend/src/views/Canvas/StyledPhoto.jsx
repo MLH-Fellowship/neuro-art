@@ -4,9 +4,11 @@ import { Paper } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
 import StarBorderIcon from "@material-ui/icons/StarBorder";
 import Box from "@material-ui/core/Box";
-function StyledPhoto({handleRatingChange}) {
+import Typography from "@material-ui/core/Typography";
+
+function StyledPhoto({ handleRatingChange }) {
   return (
-    <Grid container spacing={3}>
+    <>
       <Grid item xs={8}>
         <Paper>
           <img
@@ -27,7 +29,12 @@ function StyledPhoto({handleRatingChange}) {
           />
         </Box>
       </Grid>
-    </Grid>
+      <Grid item xs={12}>
+        <Typography variant={"h6"} gutterBottom>
+          Are you satisfied with the result? Rate it to improve our model.
+        </Typography>
+      </Grid>
+    </>
   );
 }
 

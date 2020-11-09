@@ -20,6 +20,7 @@ import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
 import StyledPhoto from "./StyledPhoto";
 
+const SUBMIT_PHOTO_ENDPOINT = "";
 const artistList = ["Monet", "Picasso", "Van Gogh"];
 
 const useStyles = makeStyles((theme) => ({
@@ -42,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// These are the steps to be shown in the stepper
 function getSteps() {
   return ["Pick a style to apply", "Upload your image", "Become an artist"];
 }
@@ -49,10 +51,13 @@ function getSteps() {
 function Canvas() {
   // Styles Hook
   const classes = useStyles();
-  // Local State utilities
+  // Local State
   const [artist, setArtist] = useState(artistList[0]);
   const [picture, setPicture] = useState([]);
+  const [styledPicture, setStyledPicture] = useState(null);
   const [rating, setRating] = useState(0);
+  // Local State utilities
+  const [loadingImage, setLoadingImage] = useState(false);
 
   // OnChange Controllers for Local State
   const handleArtistChange = (event) => {
@@ -65,7 +70,26 @@ function Canvas() {
     setRating(value);
   };
 
+  // Send Photo to back
+  const submitPhoto = async (picture) => {
+    try {
+      setLoadingImage(true);
+      let bodyFormData = new FormData();
+      if (picture.type === "image/jpeg") {
+        bodyFormData.append("image", picture);
+        const { data } = await axios.post(
+          SUBMIT_PHOTO_ENDPOINT,
+          bodyFormData
+          );
+          
+          setStyledPicture(data);
+          setLoadingImage(false);
+      }
+    } catch (e) {}
+  };
+
   // Stepper Component
+  // This is the content on each step
   function getStepContent(stepIndex) {
     switch (stepIndex) {
       case 0:
@@ -78,9 +102,6 @@ function Canvas() {
               artist={artist}
               handleArtistChange={handleArtistChange}
             />
-            <Typography variant={"h6"} gutterBottom>
-              This is the base style to transfer to your picture.
-            </Typography>
           </>
         );
       case 1:
@@ -88,18 +109,12 @@ function Canvas() {
           <>
             {" "}
             <UploadPhoto onDrop={onDrop} />
-            <Typography variant={"h6"} gutterBottom>
-              Give your best shot a try
-            </Typography>
           </>
         );
       case 2:
         return (
           <>
             <StyledPhoto handleRatingChange={handleRatingChange} />
-            <Typography variant={"h6"} gutterBottom>
-              Are you satisfied with the resul? Rate it to improve our model.
-            </Typography>
           </>
         );
       default:
@@ -108,15 +123,12 @@ function Canvas() {
   }
   const [activeStep, setActiveStep] = React.useState(0);
   const steps = getSteps();
-
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
-
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
-
   const handleReset = () => {
     setActiveStep(0);
   };
@@ -136,10 +148,6 @@ function Canvas() {
                   </Step>
                 ))}
               </Stepper>
-              <Grid
-                container
-                style={{ height: "100%", textAlign: "center" }}
-              ></Grid>
               <div>
                 {activeStep === steps.length ? (
                   <div>
@@ -149,11 +157,17 @@ function Canvas() {
                     <Button onClick={handleReset}>Try again</Button>
                   </div>
                 ) : (
-                  <div>
-                    <Typography className={classes.instructions}>
-                      {getStepContent(activeStep)}
-                    </Typography>
-                    <div>
+                  <Grid
+                    container
+                    style={{ height: "100%", textAlign: "center" }}
+                  >
+                    {getStepContent(activeStep)}
+
+                    <Grid
+                      item
+                      xs={12}
+                      style={{ height: "100%", textAlign: "center" }}
+                    >
                       <Button
                         disabled={activeStep === 0}
                         onClick={handleBack}
@@ -166,10 +180,12 @@ function Canvas() {
                         color="primary"
                         onClick={handleNext}
                       >
-                        {activeStep === steps.length - 1 ? "Send Rating" : "Next"}
+                        {activeStep === steps.length - 1
+                          ? "Send Rating"
+                          : "Next"}
                       </Button>
-                    </div>
-                  </div>
+                    </Grid>
+                  </Grid>
                 )}
               </div>
             </div>
