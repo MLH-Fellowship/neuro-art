@@ -9,21 +9,6 @@ from backend.model import nst
 #
 # os.chdir(sub_path)
 
-<<<<<<< HEAD
-# Should Recieve this from the firebase.
-real_path = os.path.dirname(os.path.realpath(__file__))
-sub_path = "/".join(real_path.split("/")[:-1])
-
-# os.chdir(sub_path)
-
-from .model import nst
-
-app=Flask(__name__)
-app.debug=True
-
-
-# With Firebase we won't need this since we are using a URL for the database.
-=======
 # Initialize Flask application.
 app=Flask(__name__)
 app.debug=True
@@ -34,7 +19,6 @@ initialize_app(cred, {'storageBucket': 'mlh-neuro-art.appspot.com'})
 firestore_client = firestore.client()
 image_collection = firestore_client.collection('images')
 
->>>>>>> 944a090f7b1696c07f992f9236155e9864e6a8bf
 def root_path():
     '''root directory'''
     real_path = os.path.dirname(os.path.realpath(__file__))
@@ -54,21 +38,12 @@ def nst_get():
 @app.route('/nst_post',methods=['GET','POST'])
 def nst_post():
     if request.method =='POST':
-<<<<<<< HEAD
-        # Frontend Request should arrive to the backend.
-        # From the front end we are receveing form data with 1 paramter, the array/string of images for style
-        # It could also be a dictionariy with keys and values where keyws are markers for the style images and values  
-        root_path()
-
-        # Convert into JSON packet and bundle both images.
-=======
         # Reset the current working directory.
         root_path()
 
         # Create a reference to the cloud storage bucket.
         bucket = storage.bucket()
 
->>>>>>> 944a090f7b1696c07f992f9236155e9864e6a8bf
         # Reference Image
         refer_img = request.form['refer_img']
         refer_img_path = '/images/nst_get/' +str(refer_img)
