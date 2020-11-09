@@ -208,8 +208,8 @@ def main(refer_img_path, target_img_path):
     
     train_step(image)
 
-    epochs = 6
-    steps_per_epoch = 2
+    epochs = 10
+    steps_per_epoch = 10
 
     step = 0
     for n in range(epochs):
