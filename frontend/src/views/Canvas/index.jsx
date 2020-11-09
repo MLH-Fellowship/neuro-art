@@ -19,8 +19,12 @@ import StepLabel from "@material-ui/core/StepLabel";
 // import StepConnector from "@material-ui/core/StepConnector";
 import Button from "@material-ui/core/Button";
 import StyledPhoto from "./StyledPhoto";
-
+import axios from "axios";
 const SUBMIT_PHOTO_ENDPOINT = "";
+
+const TEST_IMG =
+  "https://www.latercera.com/resizer/kHLHjR6u3jIRC7-xl_1oXBzxWUE=/800x0/smart/arc-anglerfish-arc2-prod-copesa.s3.amazonaws.com/public/MEP3EKODIVGKPDXNMGNLB6ZN3A.jpg";
+
 const artistList = ["Monet", "Picasso", "Van Gogh"];
 
 const useStyles = makeStyles((theme) => ({
@@ -71,21 +75,35 @@ function Canvas() {
   };
 
   // Send Photo to back
-  const submitPhoto = async (picture) => {
+  const submitPhoto = async (artist, picture) => {
+    console.log("enter submit photo", artist, picture);
     try {
       setLoadingImage(true);
+
       let bodyFormData = new FormData();
-      if (picture.type === "image/jpeg") {
+      if (picture[0].type === "image/jpeg" || picture[0].type === "image/png") {
+        bodyFormData.set("selectedArtist", artist);
         bodyFormData.append("image", picture);
-        const { data } = await axios.post(
-          SUBMIT_PHOTO_ENDPOINT,
-          bodyFormData
-          );
-          
-          setStyledPicture(data);
-          setLoadingImage(false);
+
+        // -----test
+        console.log("send req", picture);
+
+        setTimeout(
+          () => {
+            console.log("received resp");
+
+            // const { data } = await axios.post(SUBMIT_PHOTO_ENDPOINT, bodyFormData);
+            setStyledPicture(TEST_IMG);
+            // -----------------------------------------
+            setLoadingImage(false);
+          },
+
+          5000
+        );
       }
-    } catch (e) {}
+    } catch (e) {
+      console.error("An error ocurred in submitting to the backend", e);
+    }
   };
 
   // Stepper Component
@@ -114,7 +132,10 @@ function Canvas() {
       case 2:
         return (
           <>
-            <StyledPhoto handleRatingChange={handleRatingChange} />
+            <StyledPhoto
+              handleRatingChange={handleRatingChange}
+              imgURL={styledPicture}
+            />
           </>
         );
       default:
@@ -124,12 +145,20 @@ function Canvas() {
   const [activeStep, setActiveStep] = React.useState(0);
   const steps = getSteps();
   const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    setActiveStep((prevActiveStep) => {
+      if (prevActiveStep + 1 === 2) {
+        console.log("step 2 to step 3");
+        submitPhoto(artist, picture);
+      }
+      return prevActiveStep + 1;
+    });
   };
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
   const handleReset = () => {
+    setPicture([]);
+    setStyledPicture(null);
     setActiveStep(0);
   };
 
