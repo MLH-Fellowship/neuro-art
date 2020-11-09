@@ -7,7 +7,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-
+import Paper from "@material-ui/core/Paper";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
@@ -21,6 +21,7 @@ import Button from "@material-ui/core/Button";
 import StyledPhoto from "./StyledPhoto";
 import axios from "axios";
 const SUBMIT_PHOTO_ENDPOINT = "";
+const SUBMIT_RATING_ENDPOINT = "";
 
 const TEST_IMG =
   "https://www.latercera.com/resizer/kHLHjR6u3jIRC7-xl_1oXBzxWUE=/800x0/smart/arc-anglerfish-arc2-prod-copesa.s3.amazonaws.com/public/MEP3EKODIVGKPDXNMGNLB6ZN3A.jpg";
@@ -44,6 +45,14 @@ const useStyles = makeStyles((theme) => ({
   },
   selectEmpty: {
     marginTop: theme.spacing(2),
+  },
+  paper: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    margin: "12px 0",
+    padding: "12px",
+    minHeight: "200px",
   },
 }));
 
@@ -76,7 +85,6 @@ function Canvas() {
 
   // Send Photo to back
   const submitPhoto = async (artist, picture) => {
-    console.log("enter submit photo", artist, picture);
     try {
       setLoadingImage(true);
 
@@ -85,26 +93,33 @@ function Canvas() {
         bodyFormData.set("selectedArtist", artist);
         bodyFormData.append("image", picture);
 
-        // -----test
         console.log("send req", picture);
-
         setTimeout(
           () => {
             console.log("received resp");
 
             // const { data } = await axios.post(SUBMIT_PHOTO_ENDPOINT, bodyFormData);
             setStyledPicture(TEST_IMG);
-            // -----------------------------------------
             setLoadingImage(false);
           },
-
-          5000
+          3000
         );
       }
     } catch (e) {
       console.error("An error ocurred in submitting to the backend", e);
     }
   };
+  // Send Rating
+  const submitRating = async (rating) => {
+    try{
+      if(rating !==0 ){
+        console.log("rating", rating)
+        // const { data } = await axios.post(SUBMIT_RATING_ENDPOINT, rating);
+      }
+    } catch (e) {
+      console.error("An error ocurred in submitting rating", e);
+    }
+  }
 
   // Stepper Component
   // This is the content on each step
@@ -150,6 +165,10 @@ function Canvas() {
         console.log("step 2 to step 3");
         submitPhoto(artist, picture);
       }
+      if (prevActiveStep + 1 === 3) {
+        console.log("step 3 to step finish");
+        submitRating(rating);
+      }
       return prevActiveStep + 1;
     });
   };
@@ -179,12 +198,12 @@ function Canvas() {
               </Stepper>
               <div>
                 {activeStep === steps.length ? (
-                  <div>
-                    <Typography className={classes.instructions}>
-                      Don't forget to share!
-                    </Typography>
-                    <Button onClick={handleReset}>Try again</Button>
-                  </div>
+                  <Paper className={classes.paper} >
+                      <Typography className={classes.instructions}>
+                        Don't forget to share!
+                      </Typography>
+                      <Button variant={"outlined"} onClick={handleReset}>Try again</Button>
+                  </Paper>
                 ) : (
                   <Grid
                     container
