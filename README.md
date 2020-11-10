@@ -37,7 +37,6 @@ Here is a working live demo :
 
 
 
-
 ## Built with 
 |Langauge | Framework | Component|
 |-|-|-|
@@ -53,14 +52,6 @@ Here is a working live demo :
 - [ ] Add PyTorch implementation as a comparision.
 
 ## Team
-
-[![David Knox]()](https://github.com/knoxd8256)  |---|---| 
-[![Pablo Domínguez Durán]()](https://github.com/pablomdd)
-|---|---|
-[![Shayan Riyaz](https://avatars1.githubusercontent.com/u/28723598?s=460&u=9444300dccf4ead144b03c7710f0ff4c149e05f8&v=4)](https://github.com/ShayanRiyaz)
-
-
-## Made with :heart: by GitGeese (Pod 1.1.6)
 | David Knox | Pablo Domínguez Durán | Shayan Riyaz |
 | :----: | :---: | :---: |
 | [<img src="https://avatars1.githubusercontent.com/u/45473671?s=400&u=3f52530aa5a6d7225776a595e54a9f9dab7f12b8&v=4" width="100px;"/>](https://github.com/knoxd8256)<br />[💻](https://github.com/knoxd8256) [🤝]() | [<img src="https://avatars2.githubusercontent.com/u/10246682?s=460&u=10d50fc5c9b71bfadb3927ebf2325250a520455a&v=4" width="100px;"/>](https://github.com/pablomdd)<br />[🌍]() [💻]() [🤝]() | [<img src="https://avatars1.githubusercontent.com/u/28723598?s=460&u=9444300dccf4ead144b03c7710f0ff4c149e05f8&v=4" width="100px;"/>](https://shayanriyaz.github.io)<br />[🌍](https://shayanriyaz.github.io) [💻](https://github.com/ShayanRiyaz) |
