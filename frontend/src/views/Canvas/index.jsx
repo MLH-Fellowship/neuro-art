@@ -23,9 +23,8 @@ import axios from "axios";
 const SUBMIT_PHOTO_ENDPOINT = "";
 const SUBMIT_RATING_ENDPOINT = "";
 
-const TEST_IMG =
-  "https://www.latercera.com/resizer/kHLHjR6u3jIRC7-xl_1oXBzxWUE=/800x0/smart/arc-anglerfish-arc2-prod-copesa.s3.amazonaws.com/public/MEP3EKODIVGKPDXNMGNLB6ZN3A.jpg";
-
+const TEST_IMG = "https://storage.googleapis.com/mlh-neuro-art.appspot.com/result_old_mcdonalds.jpg";
+ 
 const artistList = ["Monet", "Picasso", "Van Gogh"];
 
 const useStyles = makeStyles((theme) => ({
@@ -54,6 +53,10 @@ const useStyles = makeStyles((theme) => ({
     padding: "12px",
     minHeight: "200px",
   },
+  shareImage: {
+    maxWidth: "100%",
+    maxHeight: "250px",
+  }
 }));
 
 // These are the steps to be shown in the stepper
@@ -185,7 +188,6 @@ function Canvas() {
     <>
       <Navbar />
       <Container>
-        {/* TODO: Make separate components out of each */}
         <Grid container spacing={3}>
           <Grid item md={12}>
             <div className={classes.root}>
@@ -199,6 +201,9 @@ function Canvas() {
               <div>
                 {activeStep === steps.length ? (
                   <Paper className={classes.paper} >
+                    <Grid item xs={6}>
+                      <img className={classes.shareImage} src={TEST_IMG} alt="Styled shot" />
+                    </Grid>
                       <Typography className={classes.instructions}>
                         Don't forget to share!
                       </Typography>
@@ -210,7 +215,6 @@ function Canvas() {
                     style={{ height: "100%", textAlign: "center" }}
                   >
                     {getStepContent(activeStep)}
-
                     <Grid
                       item
                       xs={12}
