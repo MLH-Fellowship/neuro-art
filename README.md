@@ -13,9 +13,11 @@
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/MLH-Fellowship/neuro-art/blob/main/LICENSE)
 </div>
 
-# WebApp
-Our web application lets users leverage the power of [Neural Style Transfer](https://arxiv.org/abs/1508.06576) to create beautiful art. Try try it out!
+## Motivation
+Ever since Deep Neural Style Transfer was introduced in 2016 [Neural Style Transfer](https://arxiv.org/abs/1508.06576) by Leon Gatys et al, the world has been fascinated by the creative power of Deep Learning Algorithms. Following the footseps of many people who were curious to build their own implementation and deployment we designed our web application to allow curious people who test out NST. Alongside inquisitiveness and diving into the structure of NST our application also lets users leverage the power of  to create beautiful art using a varity of paintings. Try try it out!
 
+
+## [Usage](https://github.com/MLH-Fellowship/neuro-art/wiki)
 
 
 ## Demo
@@ -31,15 +33,10 @@ Home         |  About | Canvas       |
 <img src="https://raw.githubusercontent.com/MLH-Fellowship/neuro-art/main/assets/home.png" title="Home " width="50%"> |<img src="https://raw.githubusercontent.com/MLH-Fellowship/neuro-art/main/assets/about.png" title="About" width="50%">|<img src="https://raw.githubusercontent.com/MLH-Fellowship/neuro-art/main/assets/canvas.png" title="Canvas" width="50%"> 
 
 
-
-
-## [Usage](https://github.com/MLH-Fellowship/neuro-art/wiki)
-
 ### Development
-
+- 
 
 ### Bug / Feature Request
-
 
 
 ## Built with 
