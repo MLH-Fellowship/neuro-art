@@ -7,6 +7,7 @@ import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import Paper from "@material-ui/core/Paper";
+import CarouselShowcase from "../../components/Carousel"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -54,12 +55,13 @@ function PickArtist({ styles, artistList, artist, handleArtistChange }) {
               onChange={handleArtistChange}
             >
               {artistList.map((artist, i) => (
-                <MenuItem value={artist} key={i}>
-                  {artist}
+                <MenuItem value={artist.name} key={i}>
+                  {artist.name}
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
+          <CarouselShowcase />
         </Paper>
       </Grid>
       <Grid item xs={12}>

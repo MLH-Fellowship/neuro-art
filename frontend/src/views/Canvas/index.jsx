@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";
 import PickArtist from "./PickArtist";
 import UploadPhoto from "./UploadPhoto";
 import { makeStyles } from "@material-ui/core/styles";
@@ -21,13 +19,23 @@ import Button from "@material-ui/core/Button";
 import StyledPhoto from "./StyledPhoto";
 import { TwitterShareButton, FacebookShareButton } from "react-share";
 import axios from "axios";
-const SUBMIT_PHOTO_ENDPOINT = "http://ttt.yodelingbear.fun:5000/nst_post";
-const SUBMIT_RATING_ENDPOINT = "";
+// Images
+import monet from "../../static/monet.jpg";
+import afremov from "../../static/afremov.jpeg";
+import munch from "../../static/munch.jpg";
+import vangogh from "../../static/vangogh.jpg";
+
+const SUBMIT_PHOTO_ENDPOINT = process.env.REACT_APP_SUBMIT_PHOTO_ENDPOINT;
 
 const TEST_IMG =
   "https://storage.googleapis.com/mlh-neuro-art.appspot.com/result_old_mcdonalds.jpg";
 
-const artistList = ["Monet", "Picasso", "Van Gogh"];
+const artistList = [
+  { name: "Claude Monet", key: 1, img: monet },
+  { name: "Vicent Van Gogh", key: 2, img: vangogh },
+  { name: "Leonid Afremov", key: 3, img: afremov },
+  { name: "Edvard Munch", key: 4, img: munch },
+];
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -99,7 +107,7 @@ function Canvas() {
 
       let bodyFormData = new FormData();
       if (picture[0].type === "image/jpeg" || picture[0].type === "image/png") {
-        bodyFormData.set("selected_artist", artist);
+        bodyFormData.set("selected_artist", artist.key);
         bodyFormData.append("target_image", picture[0]);
 
         console.log("send req", picture[0]);
