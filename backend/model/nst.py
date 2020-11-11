@@ -127,7 +127,7 @@ def style_content_loss(outputs):
   return loss
   
 
-@tf.function()
+# @tf.function()
 def train_step(image):
     with tf.GradientTape() as tape:
         outputs = extractor(image)
@@ -197,8 +197,6 @@ def main(refer_img_path, target_img_path, result_folder):
     
     style_weight =1e-2
     content_weight= 1e4
-
-    train_step(image)
 
     epochs = 5
     steps_per_epoch = 10
