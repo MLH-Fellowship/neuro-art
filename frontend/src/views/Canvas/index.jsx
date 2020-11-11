@@ -25,16 +25,17 @@ import afremov from "../../static/afremov.jpeg";
 import munch from "../../static/munch.jpg";
 import vangogh from "../../static/vangogh.jpg";
 
-const SUBMIT_PHOTO_ENDPOINT = process.env.REACT_APP_SUBMIT_PHOTO_ENDPOINT;
-
-const TEST_IMG =
-  "https://storage.googleapis.com/mlh-neuro-art.appspot.com/result_old_mcdonalds.jpg";
+// const SUBMIT_PHOTO_ENDPOINT = process.env.REACT_APP_SUBMIT_PHOTO_ENDPOINT;
+const SUBMIT_PHOTO_ENDPOINT = "http://ttt.yodelingbear.fun:5000/nst_post";
+const SUBMIT_RATING_ENDPOINT = "http://ttt.yodelingbear.fun:5000/rate";
+// const TEST_IMG =
+//   "https://storage.googleapis.com/mlh-neuro-art.appspot.com/result_old_mcdonalds.jpg";
 
 const artistList = [
-  { name: "Claude Monet", key: 1, img: monet },
+  { name: "Leonid Afremov", key: 1, img: afremov },
   { name: "Vicent Van Gogh", key: 2, img: vangogh },
-  { name: "Leonid Afremov", key: 3, img: afremov },
-  { name: "Edvard Munch", key: 4, img: munch },
+  { name: "Edvard Munch", key: 3, img: munch },
+  { name: "Claude Monet", key: 4, img: monet },
 ];
 
 const useStyles = makeStyles((theme) => ({
@@ -91,7 +92,12 @@ function Canvas() {
 
   // OnChange Controllers for Local State
   const handleArtistChange = (event) => {
-    setArtist(event.target.value);
+    for (let person of artistList) {
+      if (event.target.value === person.name) {
+        setArtist(person);
+        break;
+      }
+    }
   };
   const onDrop = (pictureFiles, pictureDataURLs) => {
     setPicture((prevPics) => [...prevPics, ...pictureFiles]);
@@ -110,9 +116,14 @@ function Canvas() {
         bodyFormData.set("selected_artist", artist.key);
         bodyFormData.append("target_image", picture[0]);
 
-        console.log("send req", picture[0]);
+        // console.log("artist", artist);
+        // console.log("send req", picture[0]);
+        // console.log("form data", bodyFormData);
+
         const { data } = await axios.post(SUBMIT_PHOTO_ENDPOINT, bodyFormData);
+
         console.log(data);
+
         const { doc_id, result_image, target_image } = data;
         setStyledPicture({
           id: doc_id,
@@ -133,9 +144,9 @@ function Canvas() {
   const submitRating = async (rating) => {
     try {
       if (rating !== 0) {
-        console.log("rating", rating);
+        // console.log("rating", rating);
         const { data } = await axios.put(
-          `${SUBMIT_PHOTO_ENDPOINT}${"/rate"}`,
+          SUBMIT_RATING_ENDPOINT,
           {
             // Keep 'rating' asignation explicit, don't use short handed assignation
             rating: rating,
@@ -160,6 +171,7 @@ function Canvas() {
   function getStepContent(stepIndex) {
     switch (stepIndex) {
       case 0:
+        console.log("artist from button", artist);
         return (
           <>
             {" "}
@@ -212,7 +224,11 @@ function Canvas() {
   };
   const handleReset = () => {
     setPicture([]);
-    setStyledPicture(null);
+    setStyledPicture({
+      id: undefined,
+      img: null,
+      targetImg: null,
+    });
     setActiveStep(0);
   };
 

@@ -31,8 +31,8 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "center",
     marginBottom: "12px",
-    padding: "12px"
-  }
+    padding: "12px",
+  },
 }));
 
 function StyledPhoto({ handleRatingChange, styledPicture }) {
@@ -54,8 +54,8 @@ function StyledPhoto({ handleRatingChange, styledPicture }) {
       </Grid>
       {!styledPicture.img ? null : (
         <>
-          <Grid item xs={12} >
-            <Paper className={classes.ratingPaper} >
+          <Grid item xs={12}>
+            <Paper className={classes.ratingPaper}>
               <Grid item xs={12}>
                 <Box component="fieldset" borderColor="transparent">
                   <Rating
@@ -69,6 +69,11 @@ function StyledPhoto({ handleRatingChange, styledPicture }) {
               </Grid>
             </Paper>
             <Grid item xs={12}>
+              <Grid item xs={12}>
+                <Typography variant="caption" gutterBottom>
+                  This might take up to 1 min.
+                </Typography>
+              </Grid>
               <Typography variant={"h6"} gutterBottom>
                 Are you satisfied with the result? Rate it to improve our model.
               </Typography>

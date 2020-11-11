@@ -10,10 +10,10 @@ import Paper from "@material-ui/core/Paper";
 // import CarouselShowcase from "../../components/Carousel";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
-import CardActions from "@material-ui/core/CardActions";
+// import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
-import Button from "@material-ui/core/Button";
+// import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -55,15 +55,12 @@ function PickArtist({ styles, artistList, artist, handleArtistChange }) {
     <>
       <Grid item xs={12} spacing={3} className={classes.paperContainer}>
         <Paper className={classes.paper}>
-          {/* <Typography variant={"h2"} gutterBottom>
-        1. Pick a style
-      </Typography> */}
           <FormControl className={classes.formControl}>
             <InputLabel id="artist-select">Pick one Artist</InputLabel>
             <Select
               labelId="artist-select"
               id="artist-select"
-              value={artist}
+              value={artist.name}
               onChange={handleArtistChange}
             >
               {artistList.map((artist, i) => (
