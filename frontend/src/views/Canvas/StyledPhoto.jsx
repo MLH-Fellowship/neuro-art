@@ -35,24 +35,24 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function StyledPhoto({ handleRatingChange, imgURL }) {
+function StyledPhoto({ handleRatingChange, styledPicture }) {
   const classes = useStyles();
   return (
     <>
       <Grid item xs className={classes.paperContainer}>
         <Paper className={classes.paper}>
-          {!imgURL ? (
+          {!styledPicture.img ? (
             <CircularProgress />
           ) : (
             <img
               // style={{ display: "none" }}
-              src={imgURL}
+              src={styledPicture.img}
               alt={"Monet"}
             />
           )}
         </Paper>
       </Grid>
-      {!imgURL ? null : (
+      {!styledPicture.img ? null : (
         <>
           <Grid item xs={12} >
             <Paper className={classes.ratingPaper} >

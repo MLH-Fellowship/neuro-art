@@ -19,12 +19,14 @@ import StepLabel from "@material-ui/core/StepLabel";
 // import StepConnector from "@material-ui/core/StepConnector";
 import Button from "@material-ui/core/Button";
 import StyledPhoto from "./StyledPhoto";
+import {TwitterShareButton, FacebookShareButton} from "react-share";
 import axios from "axios";
-const SUBMIT_PHOTO_ENDPOINT = "";
+const SUBMIT_PHOTO_ENDPOINT = "http://ttt.yodelingbear.fun:5000/nst_post";
 const SUBMIT_RATING_ENDPOINT = "";
 
-const TEST_IMG = "https://storage.googleapis.com/mlh-neuro-art.appspot.com/result_old_mcdonalds.jpg";
- 
+const TEST_IMG =
+  "https://storage.googleapis.com/mlh-neuro-art.appspot.com/result_old_mcdonalds.jpg";
+
 const artistList = ["Monet", "Picasso", "Van Gogh"];
 
 const useStyles = makeStyles((theme) => ({
@@ -55,8 +57,8 @@ const useStyles = makeStyles((theme) => ({
   },
   shareImage: {
     maxWidth: "100%",
-    maxHeight: "250px",
-  }
+    maxHeight: "400px",
+  },
 }));
 
 // These are the steps to be shown in the stepper
@@ -70,7 +72,7 @@ function Canvas() {
   // Local State
   const [artist, setArtist] = useState(artistList[0]);
   const [picture, setPicture] = useState([]);
-  const [styledPicture, setStyledPicture] = useState(null);
+  const [styledPicture, setStyledPicture] = useState({id: undefined, img: null, targetImg: null});
   const [rating, setRating] = useState(0);
   // Local State utilities
   const [loadingImage, setLoadingImage] = useState(false);
@@ -93,36 +95,32 @@ function Canvas() {
 
       let bodyFormData = new FormData();
       if (picture[0].type === "image/jpeg" || picture[0].type === "image/png") {
-        bodyFormData.set("selectedArtist", artist);
-        bodyFormData.append("image", picture);
+        bodyFormData.set("selected_artist", artist);
+        bodyFormData.append("target_image", picture[0]);
 
-        console.log("send req", picture);
-        setTimeout(
-          () => {
-            console.log("received resp");
-
-            // const { data } = await axios.post(SUBMIT_PHOTO_ENDPOINT, bodyFormData);
-            setStyledPicture(TEST_IMG);
-            setLoadingImage(false);
-          },
-          3000
-        );
+        console.log("send req", picture[0]);
+        // const {doc_id, result_image, target_image} = await axios.post(SUBMIT_PHOTO_ENDPOINT, bodyFormData);
+        const {data} = await axios.post(SUBMIT_PHOTO_ENDPOINT, bodyFormData);
+        console.log(data);
+        const {doc_id, result_image, target_image} = data;
+        setStyledPicture({id: doc_id, img: result_image, targetImg: target_image});
+        setLoadingImage(false);
       }
     } catch (e) {
-      console.error("An error ocurred in submitting to the backend", e);
+      console.error("An error ocurred in submitting to the backend",  e, e.message);
     }
   };
   // Send Rating
   const submitRating = async (rating) => {
-    try{
-      if(rating !==0 ){
-        console.log("rating", rating)
-        // const { data } = await axios.post(SUBMIT_RATING_ENDPOINT, rating);
+    try {
+      if (rating !== 0) {
+        console.log("rating", rating);
+        // const { data } = await axios.update(SUBMIT_RATING_ENDPOINT, {rating, id: styledPicture.id});
       }
     } catch (e) {
-      console.error("An error ocurred in submitting rating", e);
+      console.error("An error ocurred in submitting rating", e, e.message);
     }
-  }
+  };
 
   // Stepper Component
   // This is the content on each step
@@ -152,7 +150,8 @@ function Canvas() {
           <>
             <StyledPhoto
               handleRatingChange={handleRatingChange}
-              imgURL={styledPicture}
+              styledPicture={styledPicture}
+              // imgURL={styledPicture.img}
             />
           </>
         );
@@ -191,23 +190,36 @@ function Canvas() {
         <Grid container spacing={3}>
           <Grid item md={12}>
             <div className={classes.root}>
-              <Stepper activeStep={activeStep} alternativeLabel>
-                {steps.map((label) => (
-                  <Step key={label}>
-                    <StepLabel>{label}</StepLabel>
-                  </Step>
-                ))}
-              </Stepper>
+              <Paper>
+                <Stepper activeStep={activeStep} alternativeLabel>
+                  {steps.map((label) => (
+                    <Step key={label}>
+                      <StepLabel>{label}</StepLabel>
+                    </Step>
+                  ))}
+                </Stepper>
+              </Paper>
               <div>
                 {activeStep === steps.length ? (
-                  <Paper className={classes.paper} >
-                    <Grid item xs={6}>
-                      <img className={classes.shareImage} src={TEST_IMG} alt="Styled shot" />
+                  <Paper className={classes.paper}>
+                    <Grid item xs={6} style={{ textAlign: "center" }}>
+                      <img
+                        className={classes.shareImage}
+                        src={styledPicture.img ? styledPicture.img : null }
+                        alt="Styled shot"
+                      />
                     </Grid>
+                    <Grid item xs={6}>
+                      {/* <Box>
+                      <TwitterIcon size={32} round={true} />
+                      </Box> */}
                       <Typography className={classes.instructions}>
                         Don't forget to share!
                       </Typography>
-                      <Button variant={"outlined"} onClick={handleReset}>Try again</Button>
+                      <Button variant={"outlined"} onClick={handleReset}>
+                        Try again
+                      </Button>
+                    </Grid>
                   </Paper>
                 ) : (
                   <Grid
