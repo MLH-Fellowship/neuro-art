@@ -82,8 +82,13 @@ def nst_post():
 
 @app.route('/rate', methods=('PUT', 'POST'))
 def rate():
+    # Extract the json data.
     data = request.json
     rating = data['rating']
     doc_id = data['doc_id']
+
+    # Update the Firestore document.
     image_collection.document(doc_id).update({'rating': rating})
+
+    # Return a success message.
     return {'success': 'true'}
