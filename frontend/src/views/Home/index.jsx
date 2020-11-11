@@ -10,7 +10,7 @@ import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import { Link as RouterLink } from "react-router-dom";
 import Hero from "../../components/Hero";
-import { Box } from "@material-ui/core";
+import { Box, CssBaseline } from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardActions from "@material-ui/core/CardActions";
@@ -46,9 +46,14 @@ const useStyles = makeStyles((theme) => ({
   },
   howItWorks: {
     background: "#bbdefb",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100vw",
+    height: "200px",
   },
   h3: {
-    marginTop: theme.spacing(2),
+    marginTop: theme.spacing(3),
   },
   card: {
     margin: theme.spacing(2),
@@ -63,8 +68,9 @@ function Home() {
     <>
       <Navbar />
       <Hero />
-      <Container className={classes.howItWorks}>
-        <Grid container>
+      <CssBaseline />
+      <Container maxWidth="lg">
+        <Grid container alignItems="center" justify="center">
           <Grid item xs={12}>
             <Typography variant={"h3"} className={classes.h3}>
               How it works
