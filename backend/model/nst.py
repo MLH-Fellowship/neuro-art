@@ -182,14 +182,14 @@ def train_step(image):
   :params:
   image : input image for style transfer 
   '''
-    with tf.GradientTape() as tape:
-        outputs = extractor(image)
-        loss = style_content_loss(outputs)
-        loss += total_variation_weight*tf.image.total_variation(image)
+  with tf.GradientTape() as tape:
+      outputs = extractor(image)
+      loss = style_content_loss(outputs)
+      loss += total_variation_weight*tf.image.total_variation(image)
 
-    grad = tape.gradient(loss, image)
-    opt.apply_gradients([(grad, image)])
-    image.assign(clip_0_1(image))
+  grad = tape.gradient(loss, image)
+  opt.apply_gradients([(grad, image)])
+  image.assign(clip_0_1(image))
 
 def high_pass_x_y(image):
   ''' 
