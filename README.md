@@ -1,8 +1,8 @@
 # <div align="center">Neuro-Art 🎨<div>
 
-
-
-# ![Neuro Art Home](https://raw.githubusercontent.com/MLH-Fellowship/neuro-art/main/assets/home.png)
+<p align="center">
+  <img src="https://raw.githubusercontent.com/MLH-Fellowship/neuro-art/main/assets/home.png" width="70%">
+</p>
 
 
 ![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat) 
@@ -28,7 +28,7 @@ Here is a working live demo :
 
 Home         |  About | Canvas       | 
 :-------------------------:|:-------------------------:|:-------------------------:|
-<img src="https://raw.githubusercontent.com/MLH-Fellowship/neuro-art/main/assets/home.png" title="Home " width="100%"> |<img src="hhttps://raw.githubusercontent.com/MLH-Fellowship/neuro-art/main/assets/about.png" title="About" width="100%">|<img src="https://raw.githubusercontent.com/MLH-Fellowship/neuro-art/main/assets/canvas.png" title="Canvas" width="100%"> 
+<img src="https://raw.githubusercontent.com/MLH-Fellowship/neuro-art/main/assets/home.png" title="Home " width="50%"> |<img src="https://raw.githubusercontent.com/MLH-Fellowship/neuro-art/main/assets/about.png" title="About" width="50%">|<img src="https://raw.githubusercontent.com/MLH-Fellowship/neuro-art/main/assets/canvas.png" title="Canvas" width="50%"> 
 
 
 
