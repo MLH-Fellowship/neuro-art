@@ -1,5 +1,6 @@
 import os,sys
 from flask import Flask,escape,request,Response,g,make_response
+from flask_cors import CORS
 from flask.templating import render_template
 from firebase_admin import credentials, initialize_app, storage, firestore
 from backend.model import nst
@@ -12,6 +13,7 @@ from backend.model import nst
 # Initialize Flask application.
 app=Flask(__name__)
 app.debug=True
+CORS(app)
 
 # Initialize firebase application.
 cred = credentials.Certificate(os.path.join(app.root_path, 'keyfiles', 'cred.json'))
@@ -22,7 +24,7 @@ image_collection = firestore_client.collection('images')
 def root_path():
     '''root directory'''
     real_path = os.path.dirname(os.path.realpath(__file__))
-    sub_path = "/".join(real_path.split("/")[:-1])
+    sub_path = "\\".join(real_path.split("\\")[:-1])
     return os.chdir(sub_path)
 
 
@@ -39,17 +41,18 @@ def nst_get():
 def nst_post():
     if request.method =='POST':
         # Reset the current working directory.
-        root_path()
+        # root_path()
 
-        # Create a reference to the cloud storage bucket.
+        # Create a reference to the cloud storage bucket and a reference to the document in firestore.
         bucket = storage.bucket()
+        doc_ref = image_collection.document()
 
         # Reference Image
-        refer_img = request.form['refer_img']
-        refer_img_path = '/images/nst_get/' +str(refer_img)
+        refer_img = request.form['selected_artist']
+        refer_img_path = '/images/nst_get/nst_reference1.JPG'# +str(refer_img)
 
         # User Image
-        user_img = request.files['user_img']
+        user_img = request.files['target_image']
         user_img.save('./backend/static/images/'+ str(user_img.filename))
         user_img_path = '/images/'+str(user_img.filename)
         user_img_abs_path = f'{app.root_path}/static/images/{user_img.filename}' 
@@ -70,18 +73,17 @@ def nst_post():
         result_blob.make_public()
 
         # Construct and upload the data for this transaction.
-        data = {
+        db_data = {
             'target_image': blob.public_url,
             'result_image': result_blob.public_url,
             'style_image' : refer_img
         }
-        doc_ref = image_collection.document()
-        doc_ref.set(data)
-        print(doc_ref.id)
+        doc_ref.set(db_data)
 
-
-            
-        render_template('nst_post.html',
-                        refer_img = refer_img_path,
-                        user_img  = user_img_path,
-                        transfer_img = transfer_img_path)
+        # Collate and send the data to the front end.
+        fe_data = {
+            'doc_id': doc_ref.id,
+            'target_image': blob.public_url,
+            'result_image': result_blob.public_url
+        }
+        return fe_data
