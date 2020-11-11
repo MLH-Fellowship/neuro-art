@@ -5,11 +5,28 @@
 </p>
 
 <p align="center">
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/MLH-Fellowship/neuro-art/graphs/commit-activity) 
-[![Neuro Art Website](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](http://localhost:5000) 
-[![GitHub issues](https://img.shields.io/github/issues-raw/day8/re-frame?style=flat)](https://github.com/MLH-Fellowship/neuro-art/issues)
-[![GitHub pull requests](https://img.shields.io/github/issues-pr/day8/re-frame)](https://github.com/MLH-Fellowship/neuro-art/pulls)
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/MLH-Fellowship/neuro-art/blob/main/LICENSE)
+  <a href="https://github.com/MLH-Fellowship/neuro-art/graphs/commit-activity">
+    <img src="https://img.shields.io/badge/Maintained%3F-yes-green.svg"
+         alt="Maintenance">
+  </a>
+  <a href="http://localhost:5000"><img src="https://img.shields.io/website-up-down-green-red/http/shields.io.svg"></a>
+  <a href="https://github.com/MLH-Fellowship/neuro-art/issues">
+      <img src="https://img.shields.io/github/issues-raw/day8/re-frame?style=flat">
+  </a>
+  <a href="https://github.com/MLH-Fellowship/neuro-art/blob/main/LICENSE">
+    <img src="https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square;style=flat">
+  </a>
+</p>
+
+<p align="center">
+  <a href="#Motivation">Motivation</a> •
+  <a href="#Usage">Usage</a> •
+  <a href="#Demo">Demo</a> •
+  <a href="#Site">Site</a> •
+  <a href="#Built-with ">Built with </a> •
+  <a href="#To-do">To-do</a> •
+  <a href="#Team">Team</a> •
+  <a href="#license">License</a>
 </p>
 
 ## Motivation
@@ -25,17 +42,10 @@ Here is a working live demo :
 
 ## Site
 
-## App Screenshots
-
 Home         |  About | Canvas       | 
 :-------------------------:|:-------------------------:|:-------------------------:|
 <img src="https://raw.githubusercontent.com/MLH-Fellowship/neuro-art/main/assets/home.png" title="Home " width="50%"> |<img src="https://raw.githubusercontent.com/MLH-Fellowship/neuro-art/main/assets/about.png" title="About" width="50%">|<img src="https://raw.githubusercontent.com/MLH-Fellowship/neuro-art/main/assets/canvas.png" title="Canvas" width="50%"> 
 
-
-### Development
-- 
-
-### Bug / Feature Request
 
 
 ## Built with 
