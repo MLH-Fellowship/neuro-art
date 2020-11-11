@@ -28,7 +28,7 @@ Here is a working live demo :
 ![INSERT IMAGE]()
 
 
-## [Usage]()
+## [Usage](https://github.com/MLH-Fellowship/neuro-art/wiki)
 
 ### Development
 
@@ -54,7 +54,7 @@ Here is a working live demo :
 ## Team
 | David Knox | Pablo Domínguez Durán | Shayan Riyaz |
 | :----: | :---: | :---: |
-| [<img src="https://avatars1.githubusercontent.com/u/45473671?s=400&u=3f52530aa5a6d7225776a595e54a9f9dab7f12b8&v=4" width="100px;"/>](https://github.com/knoxd8256)<br />[💻](https://github.com/knoxd8256) [🤝]() | [<img src="https://avatars2.githubusercontent.com/u/10246682?s=460&u=10d50fc5c9b71bfadb3927ebf2325250a520455a&v=4" width="100px;"/>](https://github.com/pablomdd)<br />[🌍]() [💻]() [🤝]() | [<img src="https://avatars1.githubusercontent.com/u/28723598?s=460&u=9444300dccf4ead144b03c7710f0ff4c149e05f8&v=4" width="100px;"/>](https://shayanriyaz.github.io)<br />[🌍](https://shayanriyaz.github.io) [💻](https://github.com/ShayanRiyaz) |
+| [<img src="https://avatars1.githubusercontent.com/u/45473671?s=400&u=3f52530aa5a6d7225776a595e54a9f9dab7f12b8&v=4" width="100px;"/>](https://github.com/knoxd8256)<br />[🌍](https://davidaknox.com/) [💻](https://github.com/knoxd8256) [🤝](https://linkedin.com/in/david-knox-developer) | [<img src="https://avatars2.githubusercontent.com/u/10246682?s=460&u=10d50fc5c9b71bfadb3927ebf2325250a520455a&v=4" width="100px;"/>](https://github.com/pablomdd)<br />[🌍]() [💻]() [🤝]() | [<img src="https://avatars1.githubusercontent.com/u/28723598?s=460&u=9444300dccf4ead144b03c7710f0ff4c149e05f8&v=4" width="100px;"/>](https://shayanriyaz.github.io)<br />[🌍](https://shayanriyaz.github.io) [💻](https://github.com/ShayanRiyaz) |
 
 ## [License](https://github.com/MLH-Fellowship/neuro-art/blob/main/LICENSE)
 
