@@ -4,6 +4,15 @@
 
 # ![Neuro Art Home](https://raw.githubusercontent.com/MLH-Fellowship/neuro-art/main/assets/home.png)
 
+
+![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat) 
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/MLH-Fellowship/neuro-art/graphs/commit-activity) 
+[![Neuro Art Website](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](http://localhost:5000) 
+[![GitHub issues](https://img.shields.io/github/issues-raw/day8/re-frame?style=flat)](https://github.com/MLH-Fellowship/neuro-art/issues)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr/day8/re-frame)](https://github.com/MLH-Fellowship/neuro-art/pulls)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/MLH-Fellowship/neuro-art/blob/main/LICENSE)
+</div>
+
 # WebApp
 Our web application lets users leverage the power of [Neural Style Transfer](https://arxiv.org/abs/1508.06576) to create beautiful art. Try try it out!
 
@@ -15,11 +24,12 @@ Here is a working live demo :
 
 ## Site
 
+## App Screenshots
 
+Home         |  About | Canvas       | 
+:-------------------------:|:-------------------------:|:-------------------------:|
+<img src="https://raw.githubusercontent.com/MLH-Fellowship/neuro-art/main/assets/home.png" title="Home " width="100%"> |<img src="hhttps://raw.githubusercontent.com/MLH-Fellowship/neuro-art/main/assets/about.png" title="About" width="100%">|<img src="https://raw.githubusercontent.com/MLH-Fellowship/neuro-art/main/assets/canvas.png" title="Canvas" width="100%"> 
 
-### Charts
-![About](https://raw.githubusercontent.com/MLH-Fellowship/neuro-art/main/assets/about.png)
-![canvas](https://raw.githubusercontent.com/MLH-Fellowship/neuro-art/main/assets/canvas.png)
 
 
 
