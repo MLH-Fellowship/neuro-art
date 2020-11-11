@@ -7,7 +7,13 @@ import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import Paper from "@material-ui/core/Paper";
-import CarouselShowcase from "../../components/Carousel"
+// import CarouselShowcase from "../../components/Carousel";
+import Card from "@material-ui/core/Card";
+import CardActionArea from "@material-ui/core/CardActionArea";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import CardMedia from "@material-ui/core/CardMedia";
+import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 120,
+    minWidth: 100,
   },
   selectEmpty: {
     marginTop: theme.spacing(2),
@@ -32,8 +38,14 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(2),
   },
   paper: {
-    minHeight: "400px",
+    minHeight: "100px",
     padding: theme.spacing(5),
+  },
+  media: {
+    height: 180,
+  },
+  card: {
+    margin: "12px",
   },
 }));
 function PickArtist({ styles, artistList, artist, handleArtistChange }) {
@@ -61,8 +73,36 @@ function PickArtist({ styles, artistList, artist, handleArtistChange }) {
               ))}
             </Select>
           </FormControl>
-          <CarouselShowcase />
         </Paper>
+      </Grid>
+      <Grid container>
+        {artistList.map((artist, i) => (
+          <Grid item xs={3}>
+            <Card className={classes.card} key={i}>
+              <CardActionArea>
+                <CardMedia
+                  className={classes.media}
+                  image={artist.img}
+                  title={`${artist.name}`}
+                />
+                <CardContent>
+                  <Typography gutterBottom variant="h6" component="h5">
+                    {artist.name}
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+              {/* <CardActions>
+                    <Button
+                      size="small"
+                      color="primary"
+                      // onClick={handleArtistChange}
+                    >
+                      Select
+                    </Button>
+                  </CardActions> */}
+            </Card>
+          </Grid>
+        ))}
       </Grid>
       <Grid item xs={12}>
         <Typography variant={"h6"} gutterBottom>

@@ -111,7 +111,6 @@ function Canvas() {
         bodyFormData.append("target_image", picture[0]);
 
         console.log("send req", picture[0]);
-        // const {doc_id, result_image, target_image} = await axios.post(SUBMIT_PHOTO_ENDPOINT, bodyFormData);
         const { data } = await axios.post(SUBMIT_PHOTO_ENDPOINT, bodyFormData);
         console.log(data);
         const { doc_id, result_image, target_image } = data;
