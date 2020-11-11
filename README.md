@@ -4,14 +4,13 @@
   <img src="https://raw.githubusercontent.com/MLH-Fellowship/neuro-art/main/assets/home.png" width="70%">
 </p>
 
-
-![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat) 
+<p align="center">
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/MLH-Fellowship/neuro-art/graphs/commit-activity) 
 [![Neuro Art Website](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](http://localhost:5000) 
 [![GitHub issues](https://img.shields.io/github/issues-raw/day8/re-frame?style=flat)](https://github.com/MLH-Fellowship/neuro-art/issues)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/day8/re-frame)](https://github.com/MLH-Fellowship/neuro-art/pulls)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/MLH-Fellowship/neuro-art/blob/main/LICENSE)
-</div>
+</p>
 
 ## Motivation
 Ever since Deep Neural Style Transfer was introduced in 2016 [Neural Style Transfer](https://arxiv.org/abs/1508.06576) by Leon Gatys et al, the world has been fascinated by the creative power of Deep Learning Algorithms. Following the footseps of many people who were curious to build their own implementation and deployment we designed our web application to allow curious people who test out NST. Alongside inquisitiveness and diving into the structure of NST our application also lets users leverage the power of  to create beautiful art using a varity of paintings. Try try it out!
