@@ -34,6 +34,10 @@
 ## Motivation
 Ever since Deep Neural Style Transfer was introduced in 2016 [Neural Style Transfer](https://arxiv.org/abs/1508.06576) by Leon Gatys et al, the world has been fascinated by the creative power of Deep Learning Algorithms. Following the footseps of many people who were curious to build their own implementation and deployment we designed our web application to allow curious people who test out NST. Alongside inquisitiveness and diving into the structure of NST our application also lets users leverage the power of  to create beautiful art using a varity of paintings. Try try it out!
 
+## Key-Features
+In most Neural Style Transfer websites (PyTorch implementations) pre-trained packaged weights are used, these will perform optimially with respect to a given style of art (e.g a model focused on starry nights). Although these models do produce beautiful results our goal is to use a generic model using the layers of a previously trained model VGG19 (19 layered Visual Geometry Group) and the weights of [ImageNet](http://www.image-net.org/). You can find more information about VGG in our Wiki Docs [here](https://github.com/MLH-Fellowship/neuro-art/wiki/1---VGG-Neural-Network).
+
+Our Model uses a TensorFlow implementation of Neural Style Transfer wrapped as a REST API. For our backend we used Flask in order to serve our model. Next we used ReactJs and served it as our front end which communicates with the Flask backend. 
 
 ## [Usage](https://github.com/MLH-Fellowship/neuro-art/wiki)
 
