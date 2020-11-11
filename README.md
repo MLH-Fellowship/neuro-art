@@ -55,6 +55,14 @@ Home         |  About | Canvas       |
 
 
 ## Built with 
+
+<img src="https://img.shields.io/badge/javascript%20-%23323330.svg?&style=for-the-badge&logo=javascript&logoColor=%23F7DF1E"/> 
+<img src="https://img.shields.io/badge/python%20-%2314354C.svg?&style=for-the-badge&logo=python&logoColor=white"/> 
+<img src="https://img.shields.io/badge/flask%20-%23000.svg?&style=for-the-badge&logo=flask&logoColor=white"/> 
+<img src="https://img.shields.io/badge/react%20-%23121011.svg?&style=for-the-badge&logo=react&logoColor=blue"/>
+<img src ="https://img.shields.io/badge/firebase-%2307405e.svg?&style=for-the-badge&logo=firebase&logoColor=orange"/>
+<img src ="https://img.shields.io/badge/tensorflow-%2307405e.svg?&style=for-the-badge&logo=Tensorflow&logoColor=orange"/>
+
 |Langauge | Framework | Component|
 |-|-|-|
 |JavaScript|[React.js](https://reactjs.org/) | Frontend|
