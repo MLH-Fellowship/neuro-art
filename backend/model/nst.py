@@ -82,13 +82,38 @@ def vgg_layers(layer_names):
   return model
 
 def gram_matrix(input_tensor):
-  result = tf.linalg.einsum('bijc,bijd->bcd',input_tensor,input_tensor)
-  input_shape = tf.shape(input_tensor)
-  num_locations = tf.cast(input_shape[1]*input_shape[2],tf.float32)
-  return result/(num_locations)
+  '''
+  Uses the stylish features are present in image weights, textures, and shapes.
+  The Gram Matrix G is the set of vectors in a matrix of dot products. 
+  For a particular layer, the diagonal elements of the matrix will find how active the filter is. 
+  An active filter will help the model find wether it contains more horizontal lines, vertical lines, or textures.
 
-class StyleContentModel(tf.keras.models.Model):
+  To get the results, the matrix is multiplied by its transposed matrix. 
+  
+  :params:
+  input_tensor : tensor form of our image in order to identify the the features.
+  
+  :returns:
+  Einstein Summation / number of locations
+  '''
+  result = tf.linalg.einsum('bijc,bijd->bcd',input_tensor,input_tensor) # Einstein summation
+  input_shape = tf.shape(input_tensor) # get the shape of the tensor [x,y]
+  num_locations = tf.cast(input_shape[1]*input_shape[2],tf.float32) # Casting the input shape to num_locations as float32
+  return result/(num_locations) 
+
+class StyleContentModel(tf.keras.models.Model): 
+  '''
+  A model that returns the style and content loss values when called.
+  '''
   def __init__(self,style_layers,content_layers):
+    '''
+    Intializes the following parameters:
+    vgg : selected layers from the pretrained vgg model
+    style_layers : layers used for for the style image
+    content_layers: single layer used for the content image
+    num_style_layers : length of style_layers list.
+    vgg.trainable : Set to False, we are not retraining the previous model.
+    '''
     super(StyleContentModel,self).__init__()
     self.vgg = vgg_layers(style_layers+content_layers)
     self.style_layers = style_layers
@@ -119,10 +144,22 @@ class StyleContentModel(tf.keras.models.Model):
 
 
 def clip_0_1(image):
+  '''
+  Limit our image between 0 and 1
+  '''
   return tf.clip_by_value(image,clip_value_min=0.0,clip_value_max=1.0)
 
 
 def style_content_loss(outputs):
+  '''
+  Computes the main loss function using the values from the style and content loss values.
+  
+  :params:
+  outputs: a dict with keys 'style' and 'content'
+  
+  :returns:
+  loss : loss function which is the sum of the style loss and content loss
+  '''
   style_outputs = outputs['style']
   content_outputs = outputs['content']
   style_loss = tf.add_n([tf.reduce_mean((style_outputs[name]-style_targets[name])**2)
@@ -139,6 +176,12 @@ def style_content_loss(outputs):
 
 # @tf.function()
 def train_step(image):
+  ''' 
+  Calculating the loss function and applyinbg it to our image to transfer the style.
+  
+  :params:
+  image : input image for style transfer 
+  '''
     with tf.GradientTape() as tape:
         outputs = extractor(image)
         loss = style_content_loss(outputs)
@@ -149,15 +192,22 @@ def train_step(image):
     image.assign(clip_0_1(image))
 
 def high_pass_x_y(image):
-    x_var = image[:,:,1:,:] - image[:,:,:-1,:]
-    y_var = image[:,1:,:,:] - image[:,:-1,:,:]
-
-    return x_var, y_var
+  ''' 
+  Adds total variation loss to reduce the high frequency artifacts. 
+  Applies high frequency explicit regularization term on the high 
+  frequency components of the image.'''
+  
+  x_var = image[:,:,1:,:] - image[:,:,:-1,:]
+  y_var = image[:,1:,:,:] - image[:,:-1,:,:]
+  return x_var, y_var
 
 
 def total_variation_loss(image):
-    x_deltas, y_deltas = high_pass_x_y(image)
-    return tf.reduce_sum(tf.abs(x_deltas)) + tf.reduce_sum(tf.abs(y_deltas))
+  '''
+  Optimizes the squared value by finding the rate of change of edges with high_pass_x_y.
+  '''
+  x_deltas, y_deltas = high_pass_x_y(image)
+  return tf.reduce_sum(tf.abs(x_deltas)) + tf.reduce_sum(tf.abs(y_deltas))
 
 
 def main(refer_img_path, target_img_path, result_folder):
@@ -181,11 +231,7 @@ def main(refer_img_path, target_img_path, result_folder):
 
     # Most Commonly used layers for Neural Style Transfer
     content_layers = ['block5_conv2']
-    style_layers = ['block1_conv1',
-                    'block2_conv1',
-                    'block3_conv1',
-                    'block4_conv1',
-                    'block5_conv1']
+    style_layers = ['block1_conv1','block2_conv1','block3_conv1','block4_conv1','block5_conv1']
 
     num_content_layers=len(content_layers)    
     num_style_layers= len(style_layers)
@@ -202,14 +248,20 @@ def main(refer_img_path, target_img_path, result_folder):
     
     total_variation_weight=30
 
+    # The tf.variables are used to assign biases and weights throughout the training session. 
     image = tf.Variable(target_img)
-    opt = tf.optimizers.Adam(learning_rate = 0.02,beta_1=0.99,epsilon=1e-1)
     
-    style_weight =1e-2
-    content_weight= 1e4
+    # Use Adam as an optimizer, can also use 'L-BFGS-B' optimizer which is available as part of the scipy library
+    opt = tf.optimizers.Adam(learning_rate = 0.02, # hyper paramter (learning rate alpha)
+                             beta_1=0.99,
+                             epsilon=1e-1)
+    
+    style_weight =1e-2 # Hyper paramter 
+    content_weight= 1e4 # Hyper paramter
 
-    epochs = 5
-    steps_per_epoch = 10
+    epochs = 5 # Hyper parameter
+    steps_per_epoch = 10 # Hyper paramter
+    # number of iterations = 5*10
 
     for n in range(epochs):
       for m in range(steps_per_epoch):
