@@ -9,9 +9,11 @@
     <img src="https://img.shields.io/badge/Maintained%3F-yes-green.svg"
          alt="Maintenance">
   </a>
-  <a href="http://localhost:5000"><img src="https://img.shields.io/website-up-down-green-red/http/shields.io.svg"></a>
+  <a href="http://localhost:5000">
+    <img src="https://img.shields.io/website-up-down-green-red/http/shields.io.svg">
+  </a>
   <a href="https://github.com/MLH-Fellowship/neuro-art/issues">
-      <img src="https://img.shields.io/github/issues-raw/day8/re-frame?style=flat">
+      <img src="https://img.shields.io/github/issues-raw/MLH-Fellowship/neuro-art?style=flat">
   </a>
   <a href="https://github.com/MLH-Fellowship/neuro-art/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square;style=flat">
