@@ -14,6 +14,10 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 
+import barco from "../../static/Imagenbarco.jpg"
+import styledBarco from "../../static/result_Imagenbarco.jpg"
+import monet from "../../static/monet.jpg"
+
 const useStyles = makeStyles((theme) => ({
   mainFeaturedPost: {
     position: "relative",
@@ -56,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2),
   },
   media: {
-    height: 140,
+    height: 180,
   },
 }));
 function Home() {
@@ -78,8 +82,8 @@ function Home() {
                 <CardMedia
                   className={classes.media}
                   // image="../../static/Imagenbarco.jpg"
-                  image="https://source.unsplash.com/random"
-                  title="Ship"
+                  image={monet}
+                  title="Monet Painting"
                 />
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="h2">
@@ -113,8 +117,8 @@ function Home() {
                 <CardMedia
                   className={classes.media}
                   // image="../../static/Imagenbarco.jpg"
-                  image="https://source.unsplash.com/random"
-                  title="Ship"
+                  image={barco}
+                  title="Ciudad del Carmen, Campeche, MX."
                 />
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="h2">
@@ -148,8 +152,8 @@ function Home() {
                 <CardMedia
                   className={classes.media}
                   // image="../../static/Imagenbarco.jpg"
-                  image="https://source.unsplash.com/random"
-                  title="Ship"
+                  image={styledBarco}
+                  title="Styled Photo"
                 />
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="h2">

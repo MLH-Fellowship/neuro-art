@@ -127,17 +127,20 @@ function Canvas() {
     try {
       if (rating !== 0) {
         console.log("rating", rating);
-        const {
-          data,
-        } = await axios.put(`${SUBMIT_PHOTO_ENDPOINT}${"/rate"}`, {
-          // Keep 'rating' asignation explicit, don't use short handed assignation
-          rating: rating,
-          doc_id: styledPicture.id,
-        }, {
-          // We make sure we're sending an 'application/json'
-          headers: {
-            'Content-Type': 'application/json'
-          }});
+        const { data } = await axios.put(
+          `${SUBMIT_PHOTO_ENDPOINT}${"/rate"}`,
+          {
+            // Keep 'rating' asignation explicit, don't use short handed assignation
+            rating: rating,
+            doc_id: styledPicture.id,
+          },
+          {
+            // We make sure we're sending an 'application/json'
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         console.log(data);
       }
     } catch (e) {
@@ -208,7 +211,6 @@ function Canvas() {
 
   return (
     <>
-      <Navbar />
       <Container>
         <Grid container spacing={3}>
           <Grid item md={12}>
@@ -281,7 +283,6 @@ function Canvas() {
 
         <Grid container spacing={3}></Grid>
       </Container>
-      <Footer />
     </>
   );
 }
