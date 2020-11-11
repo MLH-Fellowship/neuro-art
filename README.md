@@ -39,13 +39,12 @@ In most Neural Style Transfer websites (PyTorch implementations) pre-trained pac
 
 Our Model uses a TensorFlow implementation of Neural Style Transfer wrapped as a REST API. For our backend we used Flask to serve our model. Next we used ReactJs and served it as our frontend.The frontend is set up in such a way that it is able to send photos to the Flask backend for processing and recieve the result communicates with the backend. In order to record our data we are using [Firebase](https://firebase.google.com/). Another parameter we record is the user rating of the image. This is for future optimization of our model.
 
-## [Usage](https://github.com/MLH-Fellowship/neuro-art/wiki)
-
+## Usage
+For usage and more information refer to our Wiki docs [here](https://github.com/MLH-Fellowship/neuro-art/wiki).
 
 ## Demo
-
-
 **Disclaimer: By using our service we are consenting to us collecting your image data. Under the spirit of open source we will only be using this data to further improve our algorithm.**
+
 Here is a working live demo :  
 
 
