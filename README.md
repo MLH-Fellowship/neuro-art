@@ -37,12 +37,15 @@ Ever since Deep Neural Style Transfer was introduced in 2016 [Neural Style Trans
 ## Key-Features
 In most Neural Style Transfer websites (PyTorch implementations) pre-trained packaged weights are used, these will perform optimially with respect to a given style of art (e.g a model focused on starry nights). Although these models do produce beautiful results our goal is to use a generic model using the layers of a previously trained model VGG19 (19 layered Visual Geometry Group) and the weights of [ImageNet](http://www.image-net.org/). You can find more information about VGG in our Wiki Docs [here](https://github.com/MLH-Fellowship/neuro-art/wiki/1---VGG-Neural-Network).
 
-Our Model uses a TensorFlow implementation of Neural Style Transfer wrapped as a REST API. For our backend we used Flask in order to serve our model. Next we used ReactJs and served it as our front end which communicates with the Flask backend. 
+Our Model uses a TensorFlow implementation of Neural Style Transfer wrapped as a REST API. For our backend we used Flask to serve our model. Next we used ReactJs and served it as our frontend.The frontend is set up in such a way that it is able to send photos to the Flask backend for processing and recieve the result communicates with the backend. In order to record our data we are using [Firebase](https://firebase.google.com/). Another parameter we record is the user rating of the image. This is for future optimization of our model.
 
 ## [Usage](https://github.com/MLH-Fellowship/neuro-art/wiki)
 
 
 ## Demo
+
+
+**Disclaimer: By using our service we are consenting to us collecting your image data. Under the spirit of open source we will only be using this data to further improve our algorithm.**
 Here is a working live demo :  
 
 
@@ -69,6 +72,8 @@ Home         |  About | Canvas       |
 ## To-do
 - [ ] BentoML Integration. Currently ran into the same error as [issue#1200](https://github.com/bentoml/BentoML/issues/1200).
 - [ ] Add customizable Hyperparamters
+- [ ] Save style and content weights for every implementation for future Reinforcement Learning.
+- [ ] Add a Gallery to show output images.
 - [ ] Add PyTorch implementation as a comparision.
 
 ## Team
