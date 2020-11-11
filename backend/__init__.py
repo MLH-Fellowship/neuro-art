@@ -24,16 +24,6 @@ firestore_client = firestore.client()
 image_collection = firestore_client.collection('images')
 
 
-@app.route('/')
-def index():
-    return render_template('index.html')
-
-
-@app.route('/nst_get')
-def nst_get():
-	return render_template('nst_get.html')
-
-
 @app.route('/nst_post',methods=['GET','POST'])
 def nst_post():
     if request.method =='POST':
