@@ -9,11 +9,12 @@ The Neural-Style-Transfer file in does the following:
 To run Follow these steps:
 
 1. `python -m virtualenv venv`
-2. `pip install -r requirements.txt`
-3. `python flask_app.py`
+2. `source venv/bin/activate` 
+3. `pip install -r requirements.txt`
+4. `python start_flask.py`
+5. In a browser open `https://localhost:0.0.0.0`
 
-4. In a browser open `https://localhost:0.0.0.0`
-
+**Alternatively you can also run `sh init.sh` in the root directory. **
 
 
 
