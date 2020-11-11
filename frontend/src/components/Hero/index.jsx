@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     position: "relative",
     backgroundColor: theme.palette.grey[800],
     color: theme.palette.common.white,
-    marginBottom: theme.spacing(4),
+    // marginBottom: theme.spacing(4),
     backgroundImage: "url(https://source.unsplash.com/random)",
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
@@ -42,7 +42,7 @@ function Hero() {
   const classes = useStyles();
 
   return (
-    <Container style={{ height: "60vh" }}>
+    <Container style={{ height: "50vh" }}>
       <Paper
         className={classes.mainFeaturedPost}
         style={{
@@ -72,17 +72,20 @@ function Hero() {
                 component={RouterLink}
                 to={"/canvas"}
                 color="primary"
-                variant="outlined"
+                variant="contained"
+                size="medium"
                 className={classes.link}
               >
                 Canvas
               </Button>
+              {"    "}
               <Button
                 component={RouterLink}
                 // to={"/canvas"}
                 href={"https://github.com/MLH-Fellowship/neuro-art"}
                 color="secondary"
                 variant="outlined"
+                size="medium"
                 className={classes.link}
               >
                 GitHub
