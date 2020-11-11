@@ -17,7 +17,12 @@ import StepLabel from "@material-ui/core/StepLabel";
 // import StepConnector from "@material-ui/core/StepConnector";
 import Button from "@material-ui/core/Button";
 import StyledPhoto from "./StyledPhoto";
-import { TwitterShareButton, FacebookShareButton } from "react-share";
+import {
+  TwitterShareButton,
+  FacebookShareButton,
+  TwitterIcon,
+  FacebookIcon,
+} from "react-share";
 import axios from "axios";
 // Images
 import monet from "../../static/monet.jpg";
@@ -258,9 +263,21 @@ function Canvas() {
                       />
                     </Grid>
                     <Grid item xs={6}>
-                      {/* <Box>
-                      <TwitterIcon size={32} round={true} />
-                      </Box> */}
+                      <TwitterShareButton
+                        title={`Neuro Art 🎨. A piece by artist ${artist.name} Go to https://github.com/MLH-Fellowship/neuro-art`}
+                        via="Neuro Art"
+                        hashtags="NeuroArt"
+                        url={styledPicture.img}
+                      >
+                        <TwitterIcon size={32} round />
+                      </TwitterShareButton>
+                      <FacebookShareButton
+                        url={styledPicture.img}
+                        quote={`Neuro Art 🎨. A piece by artist ${artist.name} Go to https://github.com/MLH-Fellowship/neuro-art`}
+                      >
+                        {" "}
+                        <FacebookIcon size={32} round />
+                      </FacebookShareButton>
                       <Typography className={classes.instructions}>
                         Don't forget to share!
                       </Typography>
