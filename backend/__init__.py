@@ -25,7 +25,7 @@ firestore_client = firestore.client()
 image_collection = firestore_client.collection('images')
 
 
-@app.route('/nst_post',methods=['GET','POST'])
+@app.route('/nst_post',methods=['POST'])
 def nst_post():
     if request.method =='POST':
 
@@ -61,6 +61,7 @@ def nst_post():
         db_data = {
             'target_image': blob.public_url,
             'result_image': result_blob.public_url,
+            'timestamp': firestore.SERVER_TIMESTAMP,
             'style_image' : refer_img
         }
         doc_ref.set(db_data)
@@ -78,3 +79,16 @@ def nst_post():
             os.remove(user_img_path)
 
         return fe_data
+
+@app.route('/rate', methods=('PUT', 'POST'))
+def rate():
+    # Extract the json data.
+    data = request.json
+    rating = data['rating']
+    doc_id = data['doc_id']
+
+    # Update the Firestore document.
+    image_collection.document(doc_id).update({'rating': rating})
+
+    # Return a success message.
+    return {'success': 'true'}
