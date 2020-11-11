@@ -2,16 +2,11 @@
 
 
 
-# ![INSERT NEURO ART COVER]()
+# ![Neuro Art Home](https://raw.githubusercontent.com/MLH-Fellowship/neuro-art/main/assets/home.png)
 
 # WebApp
-<table>
-<tr>
-<td>
 Our web application lets users leverage the power of [Neural Style Transfer](https://arxiv.org/abs/1508.06576) to create beautiful art. Try try it out!
-</td>
-</tr>
-</table>
+
 
 
 ## Demo
@@ -23,9 +18,9 @@ Here is a working live demo :
 
 
 ### Charts
-![INSERT IMAGE]()
-![INSERT IMAGE]()
-![INSERT IMAGE]()
+![About](https://raw.githubusercontent.com/MLH-Fellowship/neuro-art/main/assets/about.png)
+![canvas](https://raw.githubusercontent.com/MLH-Fellowship/neuro-art/main/assets/canvas.png)
+
 
 
 ## [Usage](https://github.com/MLH-Fellowship/neuro-art/wiki)
