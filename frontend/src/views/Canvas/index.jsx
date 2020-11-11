@@ -19,7 +19,7 @@ import StepLabel from "@material-ui/core/StepLabel";
 // import StepConnector from "@material-ui/core/StepConnector";
 import Button from "@material-ui/core/Button";
 import StyledPhoto from "./StyledPhoto";
-import {TwitterShareButton, FacebookShareButton} from "react-share";
+import { TwitterShareButton, FacebookShareButton } from "react-share";
 import axios from "axios";
 const SUBMIT_PHOTO_ENDPOINT = "http://ttt.yodelingbear.fun:5000/nst_post";
 const SUBMIT_RATING_ENDPOINT = "";
@@ -72,7 +72,11 @@ function Canvas() {
   // Local State
   const [artist, setArtist] = useState(artistList[0]);
   const [picture, setPicture] = useState([]);
-  const [styledPicture, setStyledPicture] = useState({id: undefined, img: null, targetImg: null});
+  const [styledPicture, setStyledPicture] = useState({
+    id: undefined,
+    img: null,
+    targetImg: null,
+  });
   const [rating, setRating] = useState(0);
   // Local State utilities
   const [loadingImage, setLoadingImage] = useState(false);
@@ -100,14 +104,22 @@ function Canvas() {
 
         console.log("send req", picture[0]);
         // const {doc_id, result_image, target_image} = await axios.post(SUBMIT_PHOTO_ENDPOINT, bodyFormData);
-        const {data} = await axios.post(SUBMIT_PHOTO_ENDPOINT, bodyFormData);
+        const { data } = await axios.post(SUBMIT_PHOTO_ENDPOINT, bodyFormData);
         console.log(data);
-        const {doc_id, result_image, target_image} = data;
-        setStyledPicture({id: doc_id, img: result_image, targetImg: target_image});
+        const { doc_id, result_image, target_image } = data;
+        setStyledPicture({
+          id: doc_id,
+          img: result_image,
+          targetImg: target_image,
+        });
         setLoadingImage(false);
       }
     } catch (e) {
-      console.error("An error ocurred in submitting to the backend",  e, e.message);
+      console.error(
+        "An error ocurred in submitting to the backend",
+        e,
+        e.message
+      );
     }
   };
   // Send Rating
@@ -115,7 +127,18 @@ function Canvas() {
     try {
       if (rating !== 0) {
         console.log("rating", rating);
-        // const { data } = await axios.update(SUBMIT_RATING_ENDPOINT, {rating, id: styledPicture.id});
+        const {
+          data,
+        } = await axios.put(`${SUBMIT_PHOTO_ENDPOINT}${"/rate"}`, {
+          // Keep 'rating' asignation explicit, don't use short handed assignation
+          rating: rating,
+          doc_id: styledPicture.id,
+        }, {
+          // We make sure we're sending an 'application/json'
+          headers: {
+            'Content-Type': 'application/json'
+          }});
+        console.log(data);
       }
     } catch (e) {
       console.error("An error ocurred in submitting rating", e, e.message);
@@ -205,7 +228,7 @@ function Canvas() {
                     <Grid item xs={6} style={{ textAlign: "center" }}>
                       <img
                         className={classes.shareImage}
-                        src={styledPicture.img ? styledPicture.img : null }
+                        src={styledPicture.img ? styledPicture.img : null}
                         alt="Styled shot"
                       />
                     </Grid>
