@@ -5,20 +5,17 @@ from flask.templating import render_template
 from firebase_admin import credentials, initialize_app, storage, firestore
 from backend.model import nst
 
-# real_path = os.path.dirname(os.path.realpath(__file__))
-# sub_path = "/".join(real_path.split("/")[:-1])
-#
-# os.chdir(sub_path)
-
 # Initialize Flask application.
 app=Flask(__name__)
 app.debug=True
 CORS(app)
+image_folder = os.path.join(app.static_folder, "images")
 
 # Temporary image storage directory.
-tmp_folder = os.path.join(app.static_folder, "images", 'tmp')
+tmp_folder = os.path.join(image_folder, "tmp")
 if not os.path.exists(tmp_folder):
     os.mkdir(tmp_folder)
+keep_local_img = False    # Set this True to keep images in the tmp folder.
 
 # Initialize firebase application.
 cred = credentials.Certificate(os.path.join(app.root_path, 'keyfiles', 'cred.json'))
@@ -26,27 +23,20 @@ initialize_app(cred, {'storageBucket': 'mlh-neuro-art.appspot.com'})
 firestore_client = firestore.client()
 image_collection = firestore_client.collection('images')
 
-# def root_path():
-#     '''root directory'''
-#     real_path = os.path.dirname(os.path.realpath(__file__))
-#     sub_path = "\\".join(real_path.split("\\")[:-1])
-#     return os.chdir(sub_path)
-
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
-''' Neural Style Transfer '''
+
 @app.route('/nst_get')
 def nst_get():
 	return render_template('nst_get.html')
 
+
 @app.route('/nst_post',methods=['GET','POST'])
 def nst_post():
     if request.method =='POST':
-        # Reset the current working directory.
-        # root_path()
 
         # Create a reference to the cloud storage bucket and a reference to the document in firestore.
         bucket = storage.bucket()
@@ -54,7 +44,7 @@ def nst_post():
 
         # Reference Image
         refer_img = request.form['selected_artist']
-        refer_img_path = os.path.join(tmp_folder, "nst_get", f'nst_reference{refer_img}.JPG')
+        refer_img_path = os.path.join(image_folder, "nst_get", f'nst_reference{refer_img}.JPG')
 
         # User Image
         user_img = request.files['target_image']
@@ -91,6 +81,9 @@ def nst_post():
             'result_image': result_blob.public_url
         }
 
-        os.remove(transfer_img_path)
-        os.remove(user_img_path)
+        # Clean up the images stored locally.
+        if not keep_local_img:
+            os.remove(transfer_img_path)
+            os.remove(user_img_path)
+
         return fe_data
