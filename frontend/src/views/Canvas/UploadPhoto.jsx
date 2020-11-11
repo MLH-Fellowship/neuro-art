@@ -25,6 +25,13 @@ function UploadPhoto({ onDrop }) {
           Give your best shot a try
         </Typography>
       </Grid>
+      <Grid item xs={12}>
+        <Typography variant="caption" gutterBottom>
+          Disclamer: We collect data to improve our algorithm. Please don't
+          provide sensitive data. <br/> By sutmiting youe image you agree to make it
+          public. No further nor commercial use is intended.
+        </Typography>
+      </Grid>
     </>
   );
 }

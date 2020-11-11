@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";
 import PickArtist from "./PickArtist";
 import UploadPhoto from "./UploadPhoto";
 import { makeStyles } from "@material-ui/core/styles";
@@ -19,15 +17,31 @@ import StepLabel from "@material-ui/core/StepLabel";
 // import StepConnector from "@material-ui/core/StepConnector";
 import Button from "@material-ui/core/Button";
 import StyledPhoto from "./StyledPhoto";
-import {TwitterShareButton, FacebookShareButton} from "react-share";
+import {
+  TwitterShareButton,
+  FacebookShareButton,
+  TwitterIcon,
+  FacebookIcon,
+} from "react-share";
 import axios from "axios";
+// Images
+import monet from "../../static/monet.jpg";
+import afremov from "../../static/afremov.jpeg";
+import munch from "../../static/munch.jpg";
+import vangogh from "../../static/vangogh.jpg";
+
+// const SUBMIT_PHOTO_ENDPOINT = process.env.REACT_APP_SUBMIT_PHOTO_ENDPOINT;
 const SUBMIT_PHOTO_ENDPOINT = "http://ttt.yodelingbear.fun:5000/nst_post";
-const SUBMIT_RATING_ENDPOINT = "";
+const SUBMIT_RATING_ENDPOINT = "http://ttt.yodelingbear.fun:5000/rate";
+// const TEST_IMG =
+//   "https://storage.googleapis.com/mlh-neuro-art.appspot.com/result_old_mcdonalds.jpg";
 
-const TEST_IMG =
-  "https://storage.googleapis.com/mlh-neuro-art.appspot.com/result_old_mcdonalds.jpg";
-
-const artistList = ["Monet", "Picasso", "Van Gogh"];
+const artistList = [
+  { name: "Leonid Afremov", key: 1, img: afremov },
+  { name: "Vicent Van Gogh", key: 2, img: vangogh },
+  { name: "Edvard Munch", key: 3, img: munch },
+  { name: "Claude Monet", key: 4, img: monet },
+];
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -72,14 +86,23 @@ function Canvas() {
   // Local State
   const [artist, setArtist] = useState(artistList[0]);
   const [picture, setPicture] = useState([]);
-  const [styledPicture, setStyledPicture] = useState({id: undefined, img: null, targetImg: null});
+  const [styledPicture, setStyledPicture] = useState({
+    id: undefined,
+    img: null,
+    targetImg: null,
+  });
   const [rating, setRating] = useState(0);
   // Local State utilities
   const [loadingImage, setLoadingImage] = useState(false);
 
   // OnChange Controllers for Local State
   const handleArtistChange = (event) => {
-    setArtist(event.target.value);
+    for (let person of artistList) {
+      if (event.target.value === person.name) {
+        setArtist(person);
+        break;
+      }
+    }
   };
   const onDrop = (pictureFiles, pictureDataURLs) => {
     setPicture((prevPics) => [...prevPics, ...pictureFiles]);
@@ -95,27 +118,53 @@ function Canvas() {
 
       let bodyFormData = new FormData();
       if (picture[0].type === "image/jpeg" || picture[0].type === "image/png") {
-        bodyFormData.set("selected_artist", artist);
+        bodyFormData.set("selected_artist", artist.key);
         bodyFormData.append("target_image", picture[0]);
 
-        console.log("send req", picture[0]);
-        // const {doc_id, result_image, target_image} = await axios.post(SUBMIT_PHOTO_ENDPOINT, bodyFormData);
-        const {data} = await axios.post(SUBMIT_PHOTO_ENDPOINT, bodyFormData);
+        // console.log("artist", artist);
+        // console.log("send req", picture[0]);
+        // console.log("form data", bodyFormData);
+
+        const { data } = await axios.post(SUBMIT_PHOTO_ENDPOINT, bodyFormData);
+
         console.log(data);
-        const {doc_id, result_image, target_image} = data;
-        setStyledPicture({id: doc_id, img: result_image, targetImg: target_image});
+
+        const { doc_id, result_image, target_image } = data;
+        setStyledPicture({
+          id: doc_id,
+          img: result_image,
+          targetImg: target_image,
+        });
         setLoadingImage(false);
       }
     } catch (e) {
-      console.error("An error ocurred in submitting to the backend",  e, e.message);
+      console.error(
+        "An error ocurred in submitting to the backend",
+        e,
+        e.message
+      );
     }
   };
   // Send Rating
   const submitRating = async (rating) => {
     try {
       if (rating !== 0) {
-        console.log("rating", rating);
-        // const { data } = await axios.update(SUBMIT_RATING_ENDPOINT, {rating, id: styledPicture.id});
+        // console.log("rating", rating);
+        const { data } = await axios.put(
+          SUBMIT_RATING_ENDPOINT,
+          {
+            // Keep 'rating' asignation explicit, don't use short handed assignation
+            rating: rating,
+            doc_id: styledPicture.id,
+          },
+          {
+            // We make sure we're sending an 'application/json'
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        console.log(data);
       }
     } catch (e) {
       console.error("An error ocurred in submitting rating", e, e.message);
@@ -127,6 +176,7 @@ function Canvas() {
   function getStepContent(stepIndex) {
     switch (stepIndex) {
       case 0:
+        console.log("artist from button", artist);
         return (
           <>
             {" "}
@@ -179,13 +229,16 @@ function Canvas() {
   };
   const handleReset = () => {
     setPicture([]);
-    setStyledPicture(null);
+    setStyledPicture({
+      id: undefined,
+      img: null,
+      targetImg: null,
+    });
     setActiveStep(0);
   };
 
   return (
     <>
-      <Navbar />
       <Container>
         <Grid container spacing={3}>
           <Grid item md={12}>
@@ -205,14 +258,26 @@ function Canvas() {
                     <Grid item xs={6} style={{ textAlign: "center" }}>
                       <img
                         className={classes.shareImage}
-                        src={styledPicture.img ? styledPicture.img : null }
+                        src={styledPicture.img ? styledPicture.img : null}
                         alt="Styled shot"
                       />
                     </Grid>
                     <Grid item xs={6}>
-                      {/* <Box>
-                      <TwitterIcon size={32} round={true} />
-                      </Box> */}
+                      <TwitterShareButton
+                        title={`Neuro Art 🎨. A piece by artist ${artist.name} Go to https://github.com/MLH-Fellowship/neuro-art`}
+                        via="Neuro Art"
+                        hashtags="NeuroArt"
+                        url={styledPicture.img}
+                      >
+                        <TwitterIcon size={32} round />
+                      </TwitterShareButton>
+                      <FacebookShareButton
+                        url={styledPicture.img}
+                        quote={`Neuro Art 🎨. A piece by artist ${artist.name} Go to https://github.com/MLH-Fellowship/neuro-art`}
+                      >
+                        {" "}
+                        <FacebookIcon size={32} round />
+                      </FacebookShareButton>
                       <Typography className={classes.instructions}>
                         Don't forget to share!
                       </Typography>
@@ -258,7 +323,6 @@ function Canvas() {
 
         <Grid container spacing={3}></Grid>
       </Container>
-      <Footer />
     </>
   );
 }
