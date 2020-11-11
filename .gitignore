@@ -1,12 +1,8 @@
-
 .vscode
 .theia
 __pycache__
-
 venv/
 
-
-venv
 cred.json
 
 
@@ -18,6 +14,7 @@ cred.json
 */node_modules
 */.pnp
 .pnp.js
+.env
 
 # testing
 */coverage
