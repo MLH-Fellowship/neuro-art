@@ -1,6 +1,7 @@
 import tensorflow as tf
 from tensorflow.keras.preprocessing.image import load_img,img_to_array,save_img
 from tensorflow.keras.applications import vgg19
+from os import path
 import numpy as np
 import PIL.Image
 import time
@@ -149,7 +150,7 @@ def total_variation_loss(image):
     return tf.reduce_sum(tf.abs(x_deltas)) + tf.reduce_sum(tf.abs(y_deltas))
 
 
-def main(refer_img_path, target_img_path):
+def main(refer_img_path, target_img_path, result_folder):
 
     global num_content_layers 
     global num_style_layers 
@@ -164,15 +165,9 @@ def main(refer_img_path, target_img_path):
 
     global total_variation_weight
     global opt
-
-    refer_img_path = refer_img_path.split('/')[-1]
-    target_img_path = target_img_path.split('/')[-1]
-
-    style_reference_image_path = 'backend/static/images/nst_get/' + refer_img_path
-    target_image_path = 'backend/static/images/' + target_img_path
    
-    target_img_path = load_img(target_image_path)
-    style_reference_image_path = load_img(style_reference_image_path)
+    target_img = load_img(target_img_path)
+    style_reference_image_path = load_img(refer_img_path)
 
     # Most Commonly used layers for Neural Style Transfer
     content_layers = ['block5_conv2']
@@ -190,22 +185,19 @@ def main(refer_img_path, target_img_path):
 
 
     extractor = StyleContentModel(style_layers,content_layers)
-    results = extractor(tf.constant(target_img_path))
+    results = extractor(tf.constant(target_img))
     
     style_targets = extractor(style_reference_image_path)['style']
-    content_targets = extractor(target_img_path)['content']
+    content_targets = extractor(target_img)['content']
     
     total_variation_weight=30
 
-    image = tf.Variable(target_img_path)
+    image = tf.Variable(target_img)
     opt = tf.optimizers.Adam(learning_rate = 0.02,beta_1=0.99,epsilon=1e-1)
     
     style_weight =1e-2
     content_weight= 1e4
 
-    refer_img_name = target_image_path.split(',')[0].split('/')[-1]
-    result_prefix = 'backend/static/images/__nst_results/' + refer_img_name
-    
     train_step(image)
 
     epochs = 10
@@ -218,10 +210,10 @@ def main(refer_img_path, target_img_path):
         train_step(image)
 
     img = tensor_to_image(image)
-    fname = result_prefix 
-    save_img(fname,img)
+    result_path = path.join(result_folder, 'result_' + path.basename(target_img_path))
+    save_img(result_path, img)
 
-    return fname
+    return result_path
 
 
 if __name__ == "__main__":
