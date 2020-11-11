@@ -13,13 +13,13 @@ import nst_img from "./../../static/nst_example.png";
 
 const useStyles = makeStyles((theme) => ({
   mainTitle: {
-    margin: "24px 0",
+    margin: "48px 0 24px",
   },
   mainText: {
     margin: "12px 0",
   },
   container: {
-    margin: "24px 0",
+    margin: "30px 0",
   },
   img: {
     maxHeight: "300px",
@@ -54,7 +54,7 @@ function About() {
       />
       <Container>
         <Grid container className={classes.container}>
-          <Grid item md={6}>
+          <Grid item md={6} className={classes.mainTitle}>
             <Typography variant="h3">Neural style transfer (NST)</Typography>
           </Grid>
         </Grid>
@@ -88,7 +88,7 @@ function About() {
       <Container>
         <Grid container>
           <Grid item md={6}>
-            <Typography variant="h3">Steps to Neuro Art 🎨</Typography>
+            <Typography variant="h3" className={classes.mainTitle}>Steps to Neuro Art 🎨</Typography>
           </Grid>
         </Grid>
         <Grid container>
