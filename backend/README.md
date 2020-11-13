@@ -12,7 +12,7 @@ To run Follow these steps:
 2. `source venv/bin/activate` 
 3. `pip install -r requirements.txt`
 4. `python start_flask.py`
-5. In a browser open `https://localhost:0.0.0.0`
+5. In a browser open `https://localhost:5000`
 
 **Alternatively you can also run `sh init.sh` in the root directory. **
 
