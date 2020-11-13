@@ -4,16 +4,15 @@ if [ ! -d "venv" ]; then
     echo Creating virtualenv
     echo -------------------
     python -m venv venv
+    echo -------------------
+    echo Installing Requirements
+    echo -------------------
+    pip install -r requirements.txt
 
 fi
 
 export PIP_USER=no
 source venv/bin/activate
-
-echo -------------------
-echo Installing Requirements
-echo -------------------
-pip install -r requirements.txt
 
 export FLASK_APP=start_flask.py
 
