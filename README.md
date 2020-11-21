@@ -47,7 +47,7 @@ For usage and more information refer to our Wiki docs [here](https://github.com/
 
 Here is a working live demo :  
 
-[![Demo](http://img.youtube.com/vi/OxyWbiOgJbU/0.jpg)](https://www.youtube.com/embed/OxyWbiOgJbU")
+[![Demo](http://img.youtube.com/vi/OxyWbiOgJbU/0.jpg)](https://www.youtube.com/embed/OxyWbiOgJbU)
 
 ## Site
 
