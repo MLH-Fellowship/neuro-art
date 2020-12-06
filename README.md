@@ -18,6 +18,8 @@
   <a href="https://github.com/MLH-Fellowship/neuro-art/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square;style=flat">
   </a>
+  <img src="https://img.shields.io/npm/dt/neuro-art?color=blue" alt="downloads">
+  
 </p>
 
 <p align="center">
