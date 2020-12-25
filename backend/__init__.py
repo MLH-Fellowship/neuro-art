@@ -1,13 +1,14 @@
-import os,sys
-from flask import Flask,escape,request,Response,g,make_response
-from flask_cors import CORS
-from flask.templating import render_template
+import os
+
 from firebase_admin import credentials, initialize_app, storage, firestore
+from flask import Flask, request
+from flask_cors import CORS
+
 from backend.model import nst
 
 # Initialize Flask application.
-app=Flask(__name__)
-app.debug=True
+app = Flask(__name__)
+app.debug = True
 CORS(app)
 image_folder = os.path.join(app.static_folder, "images")
 
@@ -15,7 +16,7 @@ image_folder = os.path.join(app.static_folder, "images")
 tmp_folder = os.path.join(image_folder, "tmp")
 if not os.path.exists(tmp_folder):
     os.mkdir(tmp_folder)
-keep_local_img = True    # Set this True to keep images in the tmp folder.
+keep_local_img = True  # Set this True to keep images in the tmp folder.
 
 # Initialize firebase application.
 cred = credentials.Certificate(os.path.join(app.root_path, 'keyfiles', 'cred.json'))
@@ -25,9 +26,9 @@ firestore_client = firestore.client()
 image_collection = firestore_client.collection('images')
 
 
-@app.route('/nst_post',methods=['POST'])
+@app.route('/nst_post', methods=['POST'])
 def nst_post():
-    if request.method =='POST':
+    if request.method == 'POST':
 
         # Create a reference to the cloud storage bucket and a reference to the document in firestore.
         bucket = storage.bucket()
@@ -41,7 +42,7 @@ def nst_post():
         user_img = request.files['target_image']
         image_extension = os.path.splitext(user_img.filename)[1]
         working_filename = doc_ref.id + image_extension
-        user_img_path = os.path.join(tmp_folder, working_filename) 
+        user_img_path = os.path.join(tmp_folder, working_filename)
         user_img.save(user_img_path)
 
         # Create and upload the blob containing the user image.
@@ -62,7 +63,7 @@ def nst_post():
             'target_image': blob.public_url,
             'result_image': result_blob.public_url,
             'timestamp': firestore.SERVER_TIMESTAMP,
-            'style_image' : refer_img
+            'style_image': refer_img
         }
         doc_ref.set(db_data)
 
@@ -79,6 +80,7 @@ def nst_post():
             os.remove(user_img_path)
 
         return fe_data
+
 
 @app.route('/rate', methods=('PUT', 'POST'))
 def rate():
