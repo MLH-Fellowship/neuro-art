@@ -31,8 +31,8 @@ import munch from "../../static/munch.jpg";
 import vangogh from "../../static/vangogh.jpg";
 
 // const SUBMIT_PHOTO_ENDPOINT = process.env.REACT_APP_SUBMIT_PHOTO_ENDPOINT;
-const SUBMIT_PHOTO_ENDPOINT = "http://localhost:5000/nst_post";
-const SUBMIT_RATING_ENDPOINT = "http://localhost:5000/rate";
+const SUBMIT_PHOTO_ENDPOINT = "http://ttt.yodelingbear.fun:5000/nst_post";
+const SUBMIT_RATING_ENDPOINT = "http://ttt.yodelingbear.fun:5000/rate";
 // const TEST_IMG =
 //   "https://storage.googleapis.com/mlh-neuro-art.appspot.com/result_old_mcdonalds.jpg";
 
