@@ -3,7 +3,7 @@ if [ ! -d "venv" ]; then
     echo -------------------
     echo Creating virtualenv
     echo -------------------
-    python -m venv venv
+    python3 -m venv venv
 
 fi
 
@@ -13,7 +13,7 @@ source venv/bin/activate
 echo -------------------
 echo Installing Requirements
 echo -------------------
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 
 export FLASK_APP=start_flask.py
 

@@ -15,11 +15,11 @@ image_folder = os.path.join(app.static_folder, "images")
 tmp_folder = os.path.join(image_folder, "tmp")
 if not os.path.exists(tmp_folder):
     os.mkdir(tmp_folder)
-keep_local_img = False    # Set this True to keep images in the tmp folder.
+keep_local_img = True    # Set this True to keep images in the tmp folder.
 
 # Initialize firebase application.
 cred = credentials.Certificate(os.path.join(app.root_path, 'keyfiles', 'cred.json'))
-storage_url = 'mlh-neuro-art.appspot.com'
+storage_url = 'trfufiu.appspot.com'
 initialize_app(cred, {'storageBucket': storage_url})
 firestore_client = firestore.client()
 image_collection = firestore_client.collection('images')
